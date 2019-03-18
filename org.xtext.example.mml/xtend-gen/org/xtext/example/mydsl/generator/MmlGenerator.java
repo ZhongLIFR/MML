@@ -48,10 +48,16 @@ public class MmlGenerator extends AbstractGenerator {
     final CSVSeparator delim = root.getInput().getParsingInstruction().getSep();
     final FrameworkLang Framework = root.getAlgorithm().getFramework();
     final RFormula formula = root.getFormula();
-    Object _xifexpression = null;
+    String item_string = "TRUE";
     int _column = formula.getPredictive().getColumn();
     boolean _notEquals = (_column != 0);
     if (_notEquals) {
+      item_string = "FALSE";
+    }
+    Object _xifexpression = null;
+    int _column_1 = formula.getPredictive().getColumn();
+    boolean _notEquals_1 = (_column_1 != 0);
+    if (_notEquals_1) {
       _xifexpression = Integer.valueOf(formula.getPredictive().getColumn());
     } else {
       String _colName = formula.getPredictive().getColName();
@@ -77,28 +83,59 @@ public class MmlGenerator extends AbstractGenerator {
           break;
         case "PredictorVariables":
           lkol = "no";
-          preds = (preds + "c( ");
-          final PredictorVariables pred = ((PredictorVariables) item_predictors);
-          EList<FormulaItem> _vars = pred.getVars();
-          for (final FormulaItem e : _vars) {
-            int _column_1 = e.getColumn();
-            boolean _notEquals_1 = (_column_1 != 0);
-            if (_notEquals_1) {
-              int _column_2 = e.getColumn();
-              String _plus_2 = (preds + Integer.valueOf(_column_2));
-              String _plus_3 = (_plus_2 + " ,");
-              preds = _plus_3;
-            } else {
-              String _colName_1 = e.getColName();
-              String _plus_4 = ((preds + "\'") + _colName_1);
-              String _plus_5 = (_plus_4 + "\',");
-              preds = _plus_5;
+          String _string = Framework.toString();
+          if (_string != null) {
+            switch (_string) {
+              case "R":
+                preds = (preds + "c( ");
+                final PredictorVariables pred = ((PredictorVariables) item_predictors);
+                EList<FormulaItem> _vars = pred.getVars();
+                for (final FormulaItem e : _vars) {
+                  int _column_2 = e.getColumn();
+                  boolean _notEquals_2 = (_column_2 != 0);
+                  if (_notEquals_2) {
+                    int _column_3 = e.getColumn();
+                    String _plus_2 = (preds + Integer.valueOf(_column_3));
+                    String _plus_3 = (_plus_2 + " ,");
+                    preds = _plus_3;
+                  } else {
+                    String _colName_1 = e.getColName();
+                    String _plus_4 = ((preds + "\'") + _colName_1);
+                    String _plus_5 = (_plus_4 + "\',");
+                    preds = _plus_5;
+                  }
+                }
+                int _length = preds.length();
+                int _minus = (_length - 1);
+                preds = preds.substring(0, _minus);
+                preds = (preds + " )");
+                break;
+              case "scikit-learn":
+                preds = (preds + "[ ");
+                final PredictorVariables pred_1 = ((PredictorVariables) item_predictors);
+                EList<FormulaItem> _vars_1 = pred_1.getVars();
+                for (final FormulaItem e_1 : _vars_1) {
+                  int _column_4 = e_1.getColumn();
+                  boolean _notEquals_3 = (!Objects.equal(Integer.valueOf(_column_4), "null"));
+                  if (_notEquals_3) {
+                    int _column_5 = e_1.getColumn();
+                    String _plus_6 = (preds + Integer.valueOf(_column_5));
+                    String _plus_7 = (_plus_6 + " ,");
+                    preds = _plus_7;
+                  } else {
+                    String _colName_2 = e_1.getColName();
+                    String _plus_8 = ((preds + "\'") + _colName_2);
+                    String _plus_9 = (_plus_8 + "\',");
+                    preds = _plus_9;
+                  }
+                }
+                int _length_1 = preds.length();
+                int _minus_1 = (_length_1 - 1);
+                preds = preds.substring(0, _minus_1);
+                preds = (preds + " ]");
+                break;
             }
           }
-          int _length = preds.length();
-          int _minus = (_length - 1);
-          preds = preds.substring(0, _minus);
-          preds = (preds + " )");
           break;
       }
     }
@@ -133,12 +170,16 @@ public class MmlGenerator extends AbstractGenerator {
           final RandomForest model_2 = ((RandomForest) _algorithm_2);
           final String name_2 = root.getAlgorithm().getAlgorithm().getName();
           list.add(name_2);
+          final int ntree = model_2.getNtree();
+          list.add(Integer.valueOf(ntree));
           break;
         case "LogisticRegression":
           MLAlgorithm _algorithm_3 = root.getAlgorithm().getAlgorithm();
           final LogisticRegression model_3 = ((LogisticRegression) _algorithm_3);
           final String name_3 = root.getAlgorithm().getAlgorithm().getName();
           list.add(name_3);
+          final String family = model_3.getClass_().getLiteral();
+          list.add((family + "()"));
           break;
       }
     }
@@ -146,74 +187,528 @@ public class MmlGenerator extends AbstractGenerator {
     final TrainingTest train = ((TrainingTest) stratificationmethod);
     validation.add("trainin_test");
     validation.add(train.getNumber());
-    fsa.generateFile("AllTheStates.txt", 
-      (((((((((((((((((((((("path " + path) + "\n") + "delim ") + delim) + "\n") + "framework ") + Framework) + "\n") + 
-        "y ") + item_predictive) + "\n") + "x ") + preds) + "\n") + "algo ") + list) + "\n") + "validation ") + validation) + "\n") + 
-        "metric ") + validationmetric));
-    String _string = Framework.toString();
-    boolean _equals = Objects.equal(_string, "R");
+    String metric = "[";
+    for (final ValidationMetric e_2 : validationmetric) {
+      String _literal = e_2.getLiteral();
+      boolean _notEquals_4 = (!Objects.equal(_literal, Integer.valueOf(0)));
+      if (_notEquals_4) {
+        String _literal_1 = e_2.getLiteral();
+        String _plus_10 = ((metric + "\'") + _literal_1);
+        String _plus_11 = (_plus_10 + "\',");
+        metric = _plus_11;
+      } else {
+        String _literal_2 = e_2.getLiteral();
+        String _plus_12 = ((metric + "\'") + _literal_2);
+        String _plus_13 = (_plus_12 + "\',");
+        metric = _plus_13;
+      }
+    }
+    int _length_2 = metric.length();
+    int _minus_2 = (_length_2 - 1);
+    metric = metric.substring(0, _minus_2);
+    metric = (metric + "]");
+    String _string_1 = Framework.toString();
+    boolean _equals = Objects.equal(_string_1, "R");
     if (_equals) {
-      String _string_1 = list.get(0).toString();
-      boolean _equals_1 = Objects.equal(_string_1, "SVM");
+      String _string_2 = list.get(0).toString();
+      boolean _equals_1 = Objects.equal(_string_2, "SVM");
       if (_equals_1) {
         boolean _equals_2 = Objects.equal(lkol, "no");
         if (_equals_2) {
-          String _get = validation.get(1);
-          String _plus_6 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(e1071)  #svm model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nsvmModel=function(train_test, depVar, indepVars, type, kernel, gamma, cost) {\n  tabless=list()\n  accuracy=list()\n  predictionModel=list()  \n  modelSVM=NULL\n  dat=data.frame(train_test[1])\n\n  GroupVars  <- paste(indepVars, collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, GroupVars, sep=\' ~ \'))\n  \n  svm= svm(formula = fRpart, data = dat, na.action = na.pass, type= type, kernel=kernel, cost=cost, gamma=gamma)\n\n  test = data.frame(train_test[2])\n  pred <- predict(svm,test[ , indepVars])\n  g = NULL\n  if(is.integer(depVar)){\n    g = depVar\n  }else{\n    g = which(colnames(data) == depVar)\n  }\n\t\n  cm = confusionMatrix(pred, test[,g]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision , \'\n\')\n  cat(\'Recall : \' , Recall, \'\n\')\n  cat(\'F1 : \' , F1, \'\n\')  \n}\n\n\n\ndepVar= NULL\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get);
-          String _plus_7 = (_plus_6 + " )\n\nAccuracySVM=svmModel(train_test , Y , X , \'");
-          Object _get_1 = list.get(4);
-          String _plus_8 = (_plus_7 + _get_1);
-          String _plus_9 = (_plus_8 + "\' , \'");
-          Object _get_2 = list.get(3);
-          String _plus_10 = (_plus_9 + _get_2);
-          String _plus_11 = (_plus_10 + "\' , ");
-          Object _get_3 = list.get(2);
-          String _plus_12 = (_plus_11 + _get_3);
-          String _plus_13 = (_plus_12 + " , ");
-          Object _get_4 = list.get(1);
-          String _plus_14 = (_plus_13 + _get_4);
-          String _plus_15 = (_plus_14 + ") ");
-          fsa.generateFile("SVM.R", _plus_15);
+          boolean _equals_3 = Objects.equal(item_string, "TRUE");
+          if (_equals_3) {
+            String _nomProgramme = root.getPream().getNomProgramme();
+            String _plus_14 = (_nomProgramme + ".R");
+            String _get = validation.get(1);
+            String _plus_15 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(e1071)  #svm model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nsvmModel=function(train_test, depVar, indepVars, type, kernel, gamma, cost) {\n  tabless=list()\n  accuracy=list()\n  predictionModel=list()  \n  modelSVM=NULL\n  dat=data.frame(train_test[1])\n\n  GroupVars  <- paste(indepVars, collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, GroupVars, sep=\' ~ \'))\n  \n  svm= svm(formula = fRpart, data = dat, na.action = na.pass, type= type, kernel=kernel, cost=cost, gamma=gamma)\n\n  test = data.frame(train_test[2])\n  pred <- predict(svm,test[ , indepVars])\n  g = NULL\n  if(is.integer(depVar)){\n    g = depVar\n  }else{\n    g = which(colnames(data) == depVar)\n  }\n\t\n  cm = confusionMatrix(pred, test[,g]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\n\ndepVar= NULL\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get);
+            String _plus_16 = (_plus_15 + " )\n\nAccuracySVM=svmModel(train_test , Y , X , \'");
+            Object _get_1 = list.get(4);
+            String _plus_17 = (_plus_16 + _get_1);
+            String _plus_18 = (_plus_17 + "\' , \'");
+            Object _get_2 = list.get(3);
+            String _plus_19 = (_plus_18 + _get_2);
+            String _plus_20 = (_plus_19 + "\' , ");
+            Object _get_3 = list.get(2);
+            String _plus_21 = (_plus_20 + _get_3);
+            String _plus_22 = (_plus_21 + " , ");
+            Object _get_4 = list.get(1);
+            String _plus_23 = (_plus_22 + _get_4);
+            String _plus_24 = (_plus_23 + ") ");
+            fsa.generateFile(_plus_14, _plus_24);
+          } else {
+            String _nomProgramme_1 = root.getPream().getNomProgramme();
+            String _plus_25 = (_nomProgramme_1 + ".R");
+            String _get_5 = validation.get(1);
+            String _plus_26 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(e1071)  #svm model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nsvmModel=function(train_test, depVar, indepVars, type, kernel, gamma, cost) {\n  tabless=list()\n  accuracy=list()\n  predictionModel=list()  \n  modelSVM=NULL\n  dat=data.frame(train_test[1])\n  indep_vars = colnames(dat)[indepVars]\n  GroupVars  <- paste(indep_vars, collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(colnames(dat)[depVar], GroupVars, sep=\' ~ \'))\n  \n  svm= svm(formula = fRpart, data = dat, na.action = na.pass, type= type, kernel=kernel, cost=cost, gamma=gamma)\n\n  test = data.frame(train_test[2])\n  pred <- predict(svm,test[ , indep_vars])\n\n\t\n  cm = confusionMatrix(pred, test[,depVar]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\n\ndepVar= NULL\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_5);
+            String _plus_27 = (_plus_26 + " )\n\nAccuracySVM=svmModel(train_test , Y , X , \'");
+            Object _get_6 = list.get(4);
+            String _plus_28 = (_plus_27 + _get_6);
+            String _plus_29 = (_plus_28 + "\' , \'");
+            Object _get_7 = list.get(3);
+            String _plus_30 = (_plus_29 + _get_7);
+            String _plus_31 = (_plus_30 + "\' , ");
+            Object _get_8 = list.get(2);
+            String _plus_32 = (_plus_31 + _get_8);
+            String _plus_33 = (_plus_32 + " , ");
+            Object _get_9 = list.get(1);
+            String _plus_34 = (_plus_33 + _get_9);
+            String _plus_35 = (_plus_34 + ") ");
+            fsa.generateFile(_plus_25, _plus_35);
+          }
         } else {
-          String _get_5 = validation.get(1);
-          String _plus_16 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(e1071)  #svm model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nsvmModel=function(train_test, depVar, type, kernel, gamma, cost) {\n  tabless=list()\n  accuracy=list()\n  predictionModel=list()  \n  modelSVM=NULL\n  dat=data.frame(train_test[1])\n  \n  g = NULL\n  if(is.integer(depVar)){\n    g = depVar\n  }else{\n    g = which(colnames(data) == depVar)\n  }\n\n  svm= svm(x = dat[,-g] , y= dat[, g] ,type= type, kernel=kernel, cost=cost, gamma=gamma)\n\n  test = data.frame(train_test[2])\n  pred <- predict(svm,test[ , -g])\n\t\n  cm = confusionMatrix(pred, test[,g]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision , \'\n\')\n  cat(\'Recall : \' , Recall, \'\n\')\n  cat(\'F1 : \' , F1, \'\n\')  \n}\n\n\n\ndepVar= NULL\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_5);
-          String _plus_17 = (_plus_16 + " )\n\nAccuracySVM=svmModel(train_test , Y, \'");
-          Object _get_6 = list.get(4);
-          String _plus_18 = (_plus_17 + _get_6);
-          String _plus_19 = (_plus_18 + "\' , \'");
-          Object _get_7 = list.get(3);
-          String _plus_20 = (_plus_19 + _get_7);
-          String _plus_21 = (_plus_20 + "\' , ");
-          Object _get_8 = list.get(2);
-          String _plus_22 = (_plus_21 + _get_8);
-          String _plus_23 = (_plus_22 + " , ");
-          Object _get_9 = list.get(1);
-          String _plus_24 = (_plus_23 + _get_9);
-          String _plus_25 = (_plus_24 + ") ");
-          fsa.generateFile("SVM_all.R", _plus_25);
+          boolean _equals_4 = Objects.equal(item_string, "TRUE");
+          if (_equals_4) {
+            String _nomProgramme_2 = root.getPream().getNomProgramme();
+            String _plus_36 = (_nomProgramme_2 + ".R");
+            String _get_10 = validation.get(1);
+            String _plus_37 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(e1071)  #svm model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nsvmModel=function(train_test, depVar, type, kernel, gamma, cost) {\n  tabless=list()\n  accuracy=list()\n  predictionModel=list()  \n  modelSVM=NULL\n  dat=data.frame(train_test[1])\n  \n  g = NULL\n  if(is.integer(depVar)){\n    g = depVar\n  }else{\n    g = which(colnames(data) == depVar)\n  }\n\n  svm= svm(x = dat[,-g] , y= dat[, g] ,type= type, kernel=kernel, cost=cost, gamma=gamma)\n\n  test = data.frame(train_test[2])\n  pred <- predict(svm,test[ , -g])\n\t\n  cm = confusionMatrix(pred, test[,g]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\n\ndepVar= NULL\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_10);
+            String _plus_38 = (_plus_37 + " )\n\nAccuracySVM=svmModel(train_test , Y, \'");
+            Object _get_11 = list.get(4);
+            String _plus_39 = (_plus_38 + _get_11);
+            String _plus_40 = (_plus_39 + "\' , \'");
+            Object _get_12 = list.get(3);
+            String _plus_41 = (_plus_40 + _get_12);
+            String _plus_42 = (_plus_41 + "\' , ");
+            Object _get_13 = list.get(2);
+            String _plus_43 = (_plus_42 + _get_13);
+            String _plus_44 = (_plus_43 + " , ");
+            Object _get_14 = list.get(1);
+            String _plus_45 = (_plus_44 + _get_14);
+            String _plus_46 = (_plus_45 + ") ");
+            fsa.generateFile(_plus_36, _plus_46);
+          } else {
+            String _nomProgramme_3 = root.getPream().getNomProgramme();
+            String _plus_47 = (_nomProgramme_3 + ".R");
+            String _get_15 = validation.get(1);
+            String _plus_48 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(e1071)  #svm model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nsvmModel=function(train_test, depVar, type, kernel, gamma, cost) {\n  tabless=list()\n  accuracy=list()\n  predictionModel=list()  \n  modelSVM=NULL\n  dat=data.frame(train_test[1])\n  \n  g = depVar\n\n  svm= svm(x = dat[,-g] , y= dat[, g] ,type= type, kernel=kernel, cost=cost, gamma=gamma)\n\n  test = data.frame(train_test[2])\n  pred <- predict(svm,test[ , -g])\n\t\n  cm = confusionMatrix(pred, test[,g]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\n\ndepVar= NULL\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_15);
+            String _plus_49 = (_plus_48 + " )\n\nAccuracySVM=svmModel(train_test , Y, \'");
+            Object _get_16 = list.get(4);
+            String _plus_50 = (_plus_49 + _get_16);
+            String _plus_51 = (_plus_50 + "\' , \'");
+            Object _get_17 = list.get(3);
+            String _plus_52 = (_plus_51 + _get_17);
+            String _plus_53 = (_plus_52 + "\' , ");
+            Object _get_18 = list.get(2);
+            String _plus_54 = (_plus_53 + _get_18);
+            String _plus_55 = (_plus_54 + " , ");
+            Object _get_19 = list.get(1);
+            String _plus_56 = (_plus_55 + _get_19);
+            String _plus_57 = (_plus_56 + ") ");
+            fsa.generateFile(_plus_47, _plus_57);
+          }
+        }
+      } else {
+        String _string_3 = list.get(0).toString();
+        boolean _equals_5 = Objects.equal(_string_3, "DT");
+        if (_equals_5) {
+          boolean _equals_6 = Objects.equal(lkol, "no");
+          if (_equals_6) {
+            boolean _equals_7 = Objects.equal(item_string, "TRUE");
+            if (_equals_7) {
+              String _nomProgramme_4 = root.getPream().getNomProgramme();
+              String _plus_58 = (_nomProgramme_4 + ".R");
+              String _get_20 = validation.get(1);
+              String _plus_59 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nDTModel=function(train_test, depVar, indepVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n  \n  sGroupVars  <- paste(indepVar, collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, sGroupVars, sep=\' ~ \'))\n   \n  DT= rpart(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(DT,test[ , which(names(data)==indepVar)])\n\n  pred2 = c()\n\tfor(i in 1:dim(pred)[1]){\n\t  pred2 = c(pred2, names(which.max(pred[i,])))\n\t}\n  pred2 = as.factor(pred2)\n    g = NULL\n  if(is.integer(depVar)){\n    g = depVar\n  }else{\n    g = which(colnames(data) == depVar)\n  }\n  cm = confusionMatrix(pred2, test[,g]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_20);
+              String _plus_60 = (_plus_59 + " )\n\nModel = DTModel(train_test , Y , X , ");
+              Object _get_21 = list.get(1);
+              String _plus_61 = (_plus_60 + _get_21);
+              String _plus_62 = (_plus_61 + ") ");
+              fsa.generateFile(_plus_58, _plus_62);
+            } else {
+              String _nomProgramme_5 = root.getPream().getNomProgramme();
+              String _plus_63 = (_nomProgramme_5 + ".R");
+              String _get_22 = validation.get(1);
+              String _plus_64 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nDTModel=function(train_test, depVar, indepVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n  \n  sGroupVars  <- paste(colnames(dat)[indepVar], collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(colnames(dat)[depVar], sGroupVars, sep=\' ~ \'))\n   \n  DT= rpart(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(DT,test[ , indepVar])\n\n  pred2 = c()\n\tfor(i in 1:dim(pred)[1]){\n\t  pred2 = c(pred2, names(which.max(pred[i,])))\n\t}\n  pred2 = as.factor(pred2)\n\n  cm = confusionMatrix(pred2, test[,depVar]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_22);
+              String _plus_65 = (_plus_64 + " )\n\nModel = DTModel(train_test , Y , X , ");
+              Object _get_23 = list.get(1);
+              String _plus_66 = (_plus_65 + _get_23);
+              String _plus_67 = (_plus_66 + ") ");
+              fsa.generateFile(_plus_63, _plus_67);
+            }
+          } else {
+            boolean _equals_8 = Objects.equal(item_string, "TRUE");
+            if (_equals_8) {
+              String _nomProgramme_6 = root.getPream().getNomProgramme();
+              String _plus_68 = (_nomProgramme_6 + ".R");
+              String _get_24 = validation.get(1);
+              String _plus_69 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nDTModel=function(train_test, depVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, \'.\', sep=\' ~ \'))\n   \n  DT= rpart(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(DT,test[ , -which(names(data)==depVar)])\n\n  pred2 = c()\n\tfor(i in 1:dim(pred)[1]){\n\t  pred2 = c(pred2, names(which.max(pred[i,])))\n\t}\n  pred2 = as.factor(pred2)\n    g = NULL\n  if(is.integer(depVar)){\n    g = depVar\n  }else{\n    g = which(colnames(data) == depVar)\n  }\n  cm = confusionMatrix(pred2, test[,g]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_24);
+              String _plus_70 = (_plus_69 + " )\n\nModel = DTModel(train_test , Y, ");
+              Object _get_25 = list.get(1);
+              String _plus_71 = (_plus_70 + _get_25);
+              String _plus_72 = (_plus_71 + ") ");
+              fsa.generateFile(_plus_68, _plus_72);
+            } else {
+              String _nomProgramme_7 = root.getPream().getNomProgramme();
+              String _plus_73 = (_nomProgramme_7 + ".R");
+              String _get_26 = validation.get(1);
+              String _plus_74 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nDTModel=function(train_test, depVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(colnames(dat)[depVar], \'.\', sep=\' ~ \'))\n   \n  DT= rpart(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(DT,test[ , -depVar])\n\n  pred2 = c()\n\tfor(i in 1:dim(pred)[1]){\n\t  pred2 = c(pred2, names(which.max(pred[i,])))\n\t}\n  pred2 = as.factor(pred2)\n\n  cm = confusionMatrix(pred2, test[,depVar]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_26);
+              String _plus_75 = (_plus_74 + " )\n\nModel = DTModel(train_test , Y, ");
+              Object _get_27 = list.get(1);
+              String _plus_76 = (_plus_75 + _get_27);
+              String _plus_77 = (_plus_76 + ") ");
+              fsa.generateFile(_plus_73, _plus_77);
+            }
+          }
+        } else {
+          String _string_4 = list.get(0).toString();
+          boolean _equals_9 = Objects.equal(_string_4, "RandomForest");
+          if (_equals_9) {
+            boolean _equals_10 = Objects.equal(lkol, "no");
+            if (_equals_10) {
+              boolean _equals_11 = Objects.equal(item_string, "TRUE");
+              if (_equals_11) {
+                String _nomProgramme_8 = root.getPream().getNomProgramme();
+                String _plus_78 = (_nomProgramme_8 + ".R");
+                String _get_28 = validation.get(1);
+                String _plus_79 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nRTModel=function(train_test, depVar, indepVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n  \n  sGroupVars  <- paste(indepVar, collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, sGroupVars, sep=\' ~ \'))\n   \n  RT= randomForest(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(RT,test[ , which(colnames(dat) %in% indepVar)])\n\n  cm = confusionMatrix(pred, test[,which(colnames(data)==depVar)]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_28);
+                String _plus_80 = (_plus_79 + " )\n\nModel = RTModel(train_test , Y , X , ");
+                Object _get_29 = list.get(1);
+                String _plus_81 = (_plus_80 + _get_29);
+                String _plus_82 = (_plus_81 + ") ");
+                fsa.generateFile(_plus_78, _plus_82);
+              } else {
+                String _nomProgramme_9 = root.getPream().getNomProgramme();
+                String _plus_83 = (_nomProgramme_9 + ".R");
+                String _get_30 = validation.get(1);
+                String _plus_84 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nRTModel=function(train_test, depVar, indepVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n  \n  sGroupVars  <- paste(colnames(dat)[indepVar], collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(colnames(dat)[depVar], sGroupVars, sep=\' ~ \'))\n   \n  RT= randomForest(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(RT,test[ , indepVar])\n\n  cm = confusionMatrix(pred, test[,depVar]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_30);
+                String _plus_85 = (_plus_84 + " )\n\nModel = RTModel(train_test , Y , X , ");
+                Object _get_31 = list.get(1);
+                String _plus_86 = (_plus_85 + _get_31);
+                String _plus_87 = (_plus_86 + ") ");
+                fsa.generateFile(_plus_83, _plus_87);
+              }
+            } else {
+              boolean _equals_12 = Objects.equal(item_string, "TRUE");
+              if (_equals_12) {
+                String _nomProgramme_10 = root.getPream().getNomProgramme();
+                String _plus_88 = (_nomProgramme_10 + ".R");
+                String _get_32 = validation.get(1);
+                String _plus_89 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nRTModel=function(train_test, depVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, \'.\', sep=\' ~ \'))\n   \n  RT= randomForest(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(RT,test[ , -which(colnames(data)==depVar)])\n\n  cm = confusionMatrix(pred, test[,which(colnames(data)==depVar)]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_32);
+                String _plus_90 = (_plus_89 + " )\n\nModel = RTModel(train_test , Y, ");
+                Object _get_33 = list.get(1);
+                String _plus_91 = (_plus_90 + _get_33);
+                String _plus_92 = (_plus_91 + ") ");
+                fsa.generateFile(_plus_88, _plus_92);
+              } else {
+                String _nomProgramme_11 = root.getPream().getNomProgramme();
+                String _plus_93 = (_nomProgramme_11 + ".R");
+                String _get_34 = validation.get(1);
+                String _plus_94 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nRTModel=function(train_test, depVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(colnames(dat)[depVar], \'.\', sep=\' ~ \'))\n   \n  RT= randomForest(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(RT,test[ , -depVar])\n\n  cm = confusionMatrix(pred, test[,depVar]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_34);
+                String _plus_95 = (_plus_94 + " )\n\nModel = RTModel(train_test , Y, ");
+                Object _get_35 = list.get(1);
+                String _plus_96 = (_plus_95 + _get_35);
+                String _plus_97 = (_plus_96 + ") ");
+                fsa.generateFile(_plus_93, _plus_97);
+              }
+            }
+          } else {
+            String _string_5 = list.get(0).toString();
+            boolean _equals_13 = Objects.equal(_string_5, "LogisticRegression");
+            if (_equals_13) {
+              boolean _equals_14 = Objects.equal(lkol, "no");
+              if (_equals_14) {
+                boolean _equals_15 = Objects.equal(item_string, "TRUE");
+                if (_equals_15) {
+                  String _nomProgramme_12 = root.getPream().getNomProgramme();
+                  String _plus_98 = (_nomProgramme_12 + ".R");
+                  String _get_36 = validation.get(1);
+                  String _plus_99 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nGLMModel=function(train_test, depVar, indepVar, family) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n  \n  sGroupVars  <- paste(indepVar, collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, sGroupVars, sep=\' ~ \'))\n   \n  GLM= glm(formula = fRpart, data = dat, na.action = na.pass, family = family)\n\n  test = data.frame(train_test[2])\n  pred <- predict(GLM,test[ , which(colnames(dat) %in% indepVar)])\n\n  cm = confusionMatrix(pred, test[,which(colnames(data)==depVar)]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_36);
+                  String _plus_100 = (_plus_99 + " )\n\nModel = GLMModel(train_test , Y , X , ");
+                  Object _get_37 = list.get(1);
+                  String _plus_101 = (_plus_100 + _get_37);
+                  String _plus_102 = (_plus_101 + ") ");
+                  fsa.generateFile(_plus_98, _plus_102);
+                } else {
+                  String _nomProgramme_13 = root.getPream().getNomProgramme();
+                  String _plus_103 = (_nomProgramme_13 + ".R");
+                  String _get_38 = validation.get(1);
+                  String _plus_104 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nGLMModel=function(train_test, depVar, indepVar, family) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n  \n  sGroupVars  <- paste(colnames(dat)[indepVar], collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(colnames(dat)[depVar], sGroupVars, sep=\' ~ \'))\n   \n  GLM= glm(formula = fRpart, data = dat, na.action = na.pass, family = family)\n\n  test = data.frame(train_test[2])\n  pred <- predict(GLM,test[ , indepVar])\n\n  cm = confusionMatrix(pred, test[,depVar]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_38);
+                  String _plus_105 = (_plus_104 + " )\n\nModel = GLMModel(train_test , Y , X , ");
+                  Object _get_39 = list.get(1);
+                  String _plus_106 = (_plus_105 + _get_39);
+                  String _plus_107 = (_plus_106 + ") ");
+                  fsa.generateFile(_plus_103, _plus_107);
+                }
+              } else {
+                boolean _equals_16 = Objects.equal(item_string, "TRUE");
+                if (_equals_16) {
+                  String _nomProgramme_14 = root.getPream().getNomProgramme();
+                  String _plus_108 = (_nomProgramme_14 + ".R");
+                  String _get_40 = validation.get(1);
+                  String _plus_109 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nGLMModel=function(train_test, depVar, family) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, \'.\', sep=\' ~ \'))\n   \n  GLM= glm(formula = fRpart, data = dat, na.action = na.pass, family = family)\n\n  test = data.frame(train_test[2])\n  pred <- predict(GLM,test[ , -which(colnames(data)==depVar)])\n\n  cm = confusionMatrix(pred, test[,which(colnames(data)==depVar)]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_40);
+                  String _plus_110 = (_plus_109 + " )\n\nModel = GLMModel(train_test , Y, ");
+                  Object _get_41 = list.get(1);
+                  String _plus_111 = (_plus_110 + _get_41);
+                  String _plus_112 = (_plus_111 + ") ");
+                  fsa.generateFile(_plus_108, _plus_112);
+                } else {
+                  String _nomProgramme_15 = root.getPream().getNomProgramme();
+                  String _plus_113 = (_nomProgramme_15 + ".R");
+                  String _get_42 = validation.get(1);
+                  String _plus_114 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nGLMModel=function(train_test, depVar, family) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(colnames(dat)[depVar], \'.\', sep=\' ~ \'))\n   \n  GLM= glm(formula = fRpart, data = dat, na.action = na.pass, family = family)\n\n  test = data.frame(train_test[2])\n  pred <- predict(GLM,test[ , -depVar])\n\n  cm = confusionMatrix(pred, test[,depVar]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_42);
+                  String _plus_115 = (_plus_114 + " )\n\nModel = GLMModel(train_test , Y, ");
+                  Object _get_43 = list.get(1);
+                  String _plus_116 = (_plus_115 + _get_43);
+                  String _plus_117 = (_plus_116 + ") ");
+                  fsa.generateFile(_plus_113, _plus_117);
+                }
+              }
+            }
+          }
         }
       }
-    }
-    String _string_2 = list.get(0).toString();
-    boolean _equals_3 = Objects.equal(_string_2, "DT");
-    if (_equals_3) {
-      boolean _equals_4 = Objects.equal(lkol, "no");
-      if (_equals_4) {
-        String _get_10 = validation.get(1);
-        String _plus_26 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nDTModel=function(train_test, depVar, indepVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n  \n  sGroupVars  <- paste(indepVar, collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, sGroupVars, sep=\' ~ \'))\n   \n  DT= rpart(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(DT,test[ , -which(names(data)==depVar)])\n\n  pred2 = c()\n\tfor(i in 1:dim(pred)[1]){\n\t  pred2 = c(pred2, names(which.max(pred[i,])))\n\t}\n  pred2 = as.factor(pred2)\n    g = NULL\n  if(is.integer(depVar)){\n    g = depVar\n  }else{\n    g = which(colnames(data) == depVar)\n  }\n  cm = confusionMatrix(pred2, test[,g]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision , \'\n\')\n  cat(\'Recall : \' , Recall, \'\n\')\n  cat(\'F1 : \' , F1, \'\n\')  \n}\n\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_10);
-        String _plus_27 = (_plus_26 + " )\n\nModel = DTModel(train_test , Y , X , ");
-        Object _get_11 = list.get(1);
-        String _plus_28 = (_plus_27 + _get_11);
-        String _plus_29 = (_plus_28 + ") ");
-        fsa.generateFile("DT.R", _plus_29);
+    } else {
+      String _string_6 = list.get(0).toString();
+      boolean _equals_17 = Objects.equal(_string_6, "SVM");
+      if (_equals_17) {
+        boolean _equals_18 = Objects.equal(lkol, "no");
+        if (_equals_18) {
+          boolean _equals_19 = Objects.equal(item_string, "TRUE");
+          if (_equals_19) {
+            String _nomProgramme_16 = root.getPream().getNomProgramme();
+            String _plus_118 = (_nomProgramme_16 + ".py");
+            String _get_44 = validation.get(1);
+            String _plus_119 = ((((((((("\nimport pandas as pd\nimport numpy as np\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata[[") + preds) + "]]\ny = bankdata[") + item_predictive) + "]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_44);
+            String _plus_120 = (_plus_119 + ")\n\nfrom sklearn.svm import SVC\nsvclassifier = SVC(kernel= \'");
+            Object _get_45 = list.get(3);
+            String _plus_121 = (_plus_120 + _get_45);
+            String _plus_122 = (_plus_121 + ", C = ");
+            Object _get_46 = list.get(2);
+            String _plus_123 = (_plus_122 + _get_46);
+            String _plus_124 = (_plus_123 + ", gamma = ");
+            Object _get_47 = list.get(1);
+            String _plus_125 = (_plus_124 + _get_47);
+            String _plus_126 = (_plus_125 + "\')\nsvclassifier.fit(X_train, y_train)\n\ny_pred = svclassifier.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_127 = (_plus_126 + metric);
+            String _plus_128 = (_plus_127 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_118, _plus_128);
+          } else {
+            String _nomProgramme_17 = root.getPream().getNomProgramme();
+            String _plus_129 = (_nomProgramme_17 + ".py");
+            String _get_48 = validation.get(1);
+            String _plus_130 = ((((((((("\nimport pandas as pd\nimport numpy as np\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata[bankdata.columns[") + preds) + "]]\ny = bankdata[bankdata.columns[") + item_predictive) + "]]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_48);
+            String _plus_131 = (_plus_130 + ")\n\nfrom sklearn.svm import SVC\nsvclassifier = SVC(kernel= \'");
+            Object _get_49 = list.get(3);
+            String _plus_132 = (_plus_131 + _get_49);
+            String _plus_133 = (_plus_132 + ", C = ");
+            Object _get_50 = list.get(2);
+            String _plus_134 = (_plus_133 + _get_50);
+            String _plus_135 = (_plus_134 + ", gamma = ");
+            Object _get_51 = list.get(1);
+            String _plus_136 = (_plus_135 + _get_51);
+            String _plus_137 = (_plus_136 + "\')\nsvclassifier.fit(X_train, y_train)\n\ny_pred = svclassifier.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_138 = (_plus_137 + metric);
+            String _plus_139 = (_plus_138 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_129, _plus_139);
+          }
+        } else {
+          boolean _equals_20 = Objects.equal(item_string, "TRUE");
+          if (_equals_20) {
+            String _nomProgramme_18 = root.getPream().getNomProgramme();
+            String _plus_140 = (_nomProgramme_18 + ".py");
+            String _get_52 = validation.get(1);
+            String _plus_141 = ((((((((("\nimport pandas as pd\nimport numpy as np\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata.drop(") + item_predictive) + ", axis=1)\ny = bankdata[") + item_predictive) + "]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_52);
+            String _plus_142 = (_plus_141 + ")\n\nfrom sklearn.svm import SVC\nsvclassifier = SVC(kernel= \'");
+            Object _get_53 = list.get(3);
+            String _plus_143 = (_plus_142 + _get_53);
+            String _plus_144 = (_plus_143 + ", C = ");
+            Object _get_54 = list.get(2);
+            String _plus_145 = (_plus_144 + _get_54);
+            String _plus_146 = (_plus_145 + ", gamma = ");
+            Object _get_55 = list.get(1);
+            String _plus_147 = (_plus_146 + _get_55);
+            String _plus_148 = (_plus_147 + "\')\nsvclassifier.fit(X_train, y_train)\n\ny_pred = svclassifier.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_149 = (_plus_148 + metric);
+            String _plus_150 = (_plus_149 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_140, _plus_150);
+          } else {
+            String _nomProgramme_19 = root.getPream().getNomProgramme();
+            String _plus_151 = (_nomProgramme_19 + ".py");
+            String _get_56 = validation.get(1);
+            String _plus_152 = ((((((((("\nimport pandas as pd\nimport numpy as np\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata.drop(bankdata.columns[") + item_predictive) + "], axis=1)\ny = bankdata[bankdata.columns[") + item_predictive) + "]]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_56);
+            String _plus_153 = (_plus_152 + ")\n\nfrom sklearn.svm import SVC\nsvclassifier = SVC(kernel= \'");
+            Object _get_57 = list.get(3);
+            String _plus_154 = (_plus_153 + _get_57);
+            String _plus_155 = (_plus_154 + ", C = ");
+            Object _get_58 = list.get(2);
+            String _plus_156 = (_plus_155 + _get_58);
+            String _plus_157 = (_plus_156 + ", gamma = ");
+            Object _get_59 = list.get(1);
+            String _plus_158 = (_plus_157 + _get_59);
+            String _plus_159 = (_plus_158 + "\')\nsvclassifier.fit(X_train, y_train)\n\ny_pred = svclassifier.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_160 = (_plus_159 + metric);
+            String _plus_161 = (_plus_160 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_151, _plus_161);
+          }
+        }
+      }
+      String _string_7 = list.get(0).toString();
+      boolean _equals_21 = Objects.equal(_string_7, "DT");
+      if (_equals_21) {
+        boolean _equals_22 = Objects.equal(lkol, "no");
+        if (_equals_22) {
+          boolean _equals_23 = Objects.equal(item_string, "TRUE");
+          if (_equals_23) {
+            String _nomProgramme_20 = root.getPream().getNomProgramme();
+            String _plus_162 = (_nomProgramme_20 + ".py");
+            String _get_60 = validation.get(1);
+            String _plus_163 = ((((((((("\nimport pandas as pd\nimport numpy as np\nfrom sklearn.tree import DecisionTreeClassifier\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata[[") + preds) + "]]\ny = bankdata[") + item_predictive) + "]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_60);
+            String _plus_164 = (_plus_163 + ")\n\ntree = DecisionTreeClassifier(max_depth= ");
+            Object _get_61 = list.get(1);
+            String _plus_165 = (_plus_164 + _get_61);
+            String _plus_166 = (_plus_165 + ")\ntree.fit(X_train, y_train)\n\ny_pred = tree.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_167 = (_plus_166 + metric);
+            String _plus_168 = (_plus_167 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_162, _plus_168);
+          } else {
+            String _nomProgramme_21 = root.getPream().getNomProgramme();
+            String _plus_169 = (_nomProgramme_21 + ".py");
+            String _get_62 = validation.get(1);
+            String _plus_170 = ((((((((("\nimport pandas as pd\nimport numpy as np\nfrom sklearn.tree import DecisionTreeClassifier\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata[bankdata.columns[") + preds) + "]]\ny = bankdata[bankdata.columns[") + item_predictive) + "]]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_62);
+            String _plus_171 = (_plus_170 + ")\n\ntree = DecisionTreeClassifier(max_depth= ");
+            Object _get_63 = list.get(1);
+            String _plus_172 = (_plus_171 + _get_63);
+            String _plus_173 = (_plus_172 + ")\ntree.fit(X_train, y_train)\n\ny_pred = tree.predict(X_test)\n\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_174 = (_plus_173 + metric);
+            String _plus_175 = (_plus_174 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_169, _plus_175);
+          }
+        } else {
+          boolean _equals_24 = Objects.equal(item_string, "TRUE");
+          if (_equals_24) {
+            String _nomProgramme_22 = root.getPream().getNomProgramme();
+            String _plus_176 = (_nomProgramme_22 + ".py");
+            String _get_64 = validation.get(1);
+            String _plus_177 = ((((((((("\nimport pandas as pd\nimport numpy as np\nfrom sklearn.tree import DecisionTreeClassifier\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata.drop(") + item_predictive) + ", axis=1)\ny = bankdata[") + item_predictive) + "]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_64);
+            String _plus_178 = (_plus_177 + ")\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ");
+            String _get_65 = validation.get(1);
+            String _plus_179 = (_plus_178 + _get_65);
+            String _plus_180 = (_plus_179 + ")\n\ntree = DecisionTreeClassifier(max_depth= ");
+            Object _get_66 = list.get(1);
+            String _plus_181 = (_plus_180 + _get_66);
+            String _plus_182 = (_plus_181 + ")\ntree.fit(X_train, y_train)\n\ny_pred = tree.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_183 = (_plus_182 + metric);
+            String _plus_184 = (_plus_183 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_176, _plus_184);
+          } else {
+            String _nomProgramme_23 = root.getPream().getNomProgramme();
+            String _plus_185 = (_nomProgramme_23 + ".py");
+            String _get_67 = validation.get(1);
+            String _plus_186 = ((((((((("\nimport pandas as pd\nimport numpy as np\nfrom sklearn.tree import DecisionTreeClassifier\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = ") + delim) + ")\n\nX = bankdata.drop(bankdata.columns[") + item_predictive) + "], axis=1)\ny = bankdata[bankdata.columns[") + item_predictive) + "]]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_67);
+            String _plus_187 = (_plus_186 + ")\n\ntree = DecisionTreeClassifier(max_depth= \'");
+            Object _get_68 = list.get(1);
+            String _plus_188 = (_plus_187 + _get_68);
+            String _plus_189 = (_plus_188 + "\')\ntree.fit(X_train, y_train)\n\ny_pred = tree.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_190 = (_plus_189 + metric);
+            String _plus_191 = (_plus_190 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_185, _plus_191);
+          }
+        }
+      }
+      String _string_8 = list.get(0).toString();
+      boolean _equals_25 = Objects.equal(_string_8, "RandomForest");
+      if (_equals_25) {
+        boolean _equals_26 = Objects.equal(lkol, "no");
+        if (_equals_26) {
+          boolean _equals_27 = Objects.equal(item_string, "TRUE");
+          if (_equals_27) {
+            String _nomProgramme_24 = root.getPream().getNomProgramme();
+            String _plus_192 = (_nomProgramme_24 + ".py");
+            String _get_69 = validation.get(1);
+            String _plus_193 = ((((((((("\nimport pandas as pd\nimport numpy as np\nfrom sklearn.ensemble import RandomForestClassifier\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata[[") + preds) + "]]\ny = bankdata[") + item_predictive) + "]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_69);
+            String _plus_194 = (_plus_193 + ")\n\nrandomModel=RandomForestClassifier(max_depth=");
+            Object _get_70 = list.get(1);
+            String _plus_195 = (_plus_194 + _get_70);
+            String _plus_196 = (_plus_195 + ")\nrandomModel.fit(X_train, y_train)\n\ny_pred=randomModel.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_197 = (_plus_196 + metric);
+            String _plus_198 = (_plus_197 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_192, _plus_198);
+          } else {
+            String _nomProgramme_25 = root.getPream().getNomProgramme();
+            String _plus_199 = (_nomProgramme_25 + ".py");
+            String _get_71 = validation.get(1);
+            String _plus_200 = ((((((((("\nimport pandas as pd\nimport numpy as np\nfrom sklearn.ensemble import RandomForestClassifier\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata[bankdata.columns[") + preds) + "]]\ny = bankdata[bankdata.columns[") + item_predictive) + "]]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_71);
+            String _plus_201 = (_plus_200 + ")\n\nrandomModel=RandomForestClassifier(max_depth=");
+            Object _get_72 = list.get(1);
+            String _plus_202 = (_plus_201 + _get_72);
+            String _plus_203 = (_plus_202 + ")\nrandomModel.fit(X_train, y_train)\n\ny_pred=randomModel.predict(X_test)\n\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_204 = (_plus_203 + metric);
+            String _plus_205 = (_plus_204 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_199, _plus_205);
+          }
+        } else {
+          boolean _equals_28 = Objects.equal(item_string, "TRUE");
+          if (_equals_28) {
+            String _nomProgramme_26 = root.getPream().getNomProgramme();
+            String _plus_206 = (_nomProgramme_26 + ".py");
+            String _get_73 = validation.get(1);
+            String _plus_207 = ((((((((("\nimport pandas as pd\nimport numpy as np\nfrom sklearn.ensemble import RandomForestClassifier\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = \'") + delim) + "\')\n\nX = bankdata.drop(") + item_predictive) + ", axis=1)\ny = bankdata[") + item_predictive) + "]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_73);
+            String _plus_208 = (_plus_207 + ")\n\n\nrandomModel=RandomForestClassifier(max_depth=");
+            Object _get_74 = list.get(1);
+            String _plus_209 = (_plus_208 + _get_74);
+            String _plus_210 = (_plus_209 + ")\nrandomModel.fit(X_train, y_train)\n\ny_pred=randomModel.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_211 = (_plus_210 + metric);
+            String _plus_212 = (_plus_211 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_206, _plus_212);
+          } else {
+            String _nomProgramme_27 = root.getPream().getNomProgramme();
+            String _plus_213 = (_nomProgramme_27 + ".py");
+            String _get_75 = validation.get(1);
+            String _plus_214 = ((((((((("\nimport pandas as pd\nimport numpy as np\nfrom sklearn.ensemble import RandomForestClassifier\n\nbankdata = pd.read_csv(\'" + path) + "\', sep = ") + delim) + ")\n\nX = bankdata.drop(bankdata.columns[") + item_predictive) + "], axis=1)\ny = bankdata[bankdata.columns[") + item_predictive) + "]]\n\nfrom sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, train_size = ") + _get_75);
+            String _plus_215 = (_plus_214 + ")\n\nrandomModel=RandomForestClassifier(max_depth=");
+            Object _get_76 = list.get(1);
+            String _plus_216 = (_plus_215 + _get_76);
+            String _plus_217 = (_plus_216 + ")\nrandomModel.fit(X_train, y_train)\n\ny_pred=randomModel.predict(X_test)\n\nfrom sklearn.metrics import classification_report, confusion_matrix\nerror = classification_report(y_test,y_pred, output_dict= True)\nmetrics = ");
+            String _plus_218 = (_plus_217 + metric);
+            String _plus_219 = (_plus_218 + "\nfor i in range(len(metrics)):\n        print(str(metrics[i]) + \'    :   \'  + str(error[\'weighted avg\'][metrics[i]]))");
+            fsa.generateFile(_plus_213, _plus_219);
+          }
+        }
       } else {
-        String _get_12 = validation.get(1);
-        String _plus_30 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\nlibrary(randomForest) #random forest model\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nDTModel=function(train_test, depVar, max_depth) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, \'.\', sep=\' ~ \'))\n   \n  DT= rpart(formula = fRpart, data = dat, na.action = na.pass, maxdepth = max_depth)\n\n  test = data.frame(train_test[2])\n  pred <- predict(DT,test[ , -which(names(data)==depVar)])\n\n  pred2 = c()\n\tfor(i in 1:dim(pred)[1]){\n\t  pred2 = c(pred2, names(which.max(pred[i,])))\n\t}\n  pred2 = as.factor(pred2)\n    g = NULL\n  if(is.integer(depVar)){\n    g = depVar\n  }else{\n    g = which(colnames(data) == depVar)\n  }\n  cm = confusionMatrix(pred2, test[,g]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision , \'\n\')\n  cat(\'Recall : \' , Recall, \'\n\')\n  cat(\'F1 : \' , F1, \'\n\')  \n}\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_12);
-        String _plus_31 = (_plus_30 + " )\n\nModel = DTModel(train_test , Y, ");
-        Object _get_13 = list.get(1);
-        String _plus_32 = (_plus_31 + _get_13);
-        String _plus_33 = (_plus_32 + ") ");
-        fsa.generateFile("DT_all.R", _plus_33);
+        String _string_9 = list.get(0).toString();
+        boolean _equals_29 = Objects.equal(_string_9, "LogisticRegression");
+        if (_equals_29) {
+          boolean _equals_30 = Objects.equal(lkol, "no");
+          if (_equals_30) {
+            boolean _equals_31 = Objects.equal(item_string, "TRUE");
+            if (_equals_31) {
+              String _get_77 = validation.get(1);
+              String _plus_220 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nGLMModel=function(train_test, depVar, indepVar, family) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n  \n  sGroupVars  <- paste(indepVar, collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, sGroupVars, sep=\' ~ \'))\n   \n  GLM= glm(formula = fRpart, data = dat, na.action = na.pass, family = family)\n\n  test = data.frame(train_test[2])\n  pred <- predict(GLM,test[ , which(colnames(dat) %in% indepVar)])\n\n  cm = confusionMatrix(pred, test[,which(colnames(data)==depVar)]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_77);
+              String _plus_221 = (_plus_220 + " )\n\nModel = GLMModel(train_test , Y , X , ");
+              Object _get_78 = list.get(1);
+              String _plus_222 = (_plus_221 + _get_78);
+              String _plus_223 = (_plus_222 + ") ");
+              fsa.generateFile("LogisticRegression.R", _plus_223);
+            } else {
+              String _get_79 = validation.get(1);
+              String _plus_224 = ((((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nGLMModel=function(train_test, depVar, indepVar, family) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n  \n  sGroupVars  <- paste(colnames(dat)[indepVar], collapse = \' + \')\n  \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(colnames(dat)[depVar], sGroupVars, sep=\' ~ \'))\n   \n  GLM= glm(formula = fRpart, data = dat, na.action = na.pass, family = family)\n\n  test = data.frame(train_test[2])\n  pred <- predict(GLM,test[ , indepVar])\n\n  cm = confusionMatrix(pred, test[,depVar]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\nX=getIndepVar(") + preds) + " )\n\ntrain_test=crossValidation(data, ") + _get_79);
+              String _plus_225 = (_plus_224 + " )\n\nModel = GLMModel(train_test , Y , X , ");
+              Object _get_80 = list.get(1);
+              String _plus_226 = (_plus_225 + _get_80);
+              String _plus_227 = (_plus_226 + ") ");
+              fsa.generateFile("LogisticRegression.R", _plus_227);
+            }
+          } else {
+            boolean _equals_32 = Objects.equal(item_string, "TRUE");
+            if (_equals_32) {
+              String _get_81 = validation.get(1);
+              String _plus_228 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nGLMModel=function(train_test, depVar, family) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(depVar, \'.\', sep=\' ~ \'))\n   \n  GLM= glm(formula = fRpart, data = dat, na.action = na.pass, family = family)\n\n  test = data.frame(train_test[2])\n  pred <- predict(GLM,test[ , -which(colnames(data)==depVar)])\n\n  cm = confusionMatrix(pred, test[,which(colnames(data)==depVar)]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_81);
+              String _plus_229 = (_plus_228 + " )\n\nModel = GLMModel(train_test , Y, ");
+              Object _get_82 = list.get(1);
+              String _plus_230 = (_plus_229 + _get_82);
+              String _plus_231 = (_plus_230 + ") ");
+              fsa.generateFile("LogisticRegression.R", _plus_231);
+            } else {
+              String _get_83 = validation.get(1);
+              String _plus_232 = ((((((("library(rpart)\nlibrary(readr) #read csv files\nlibrary(caret) # crossvalidation function\nlibrary(ROCR)\n\nreadFile <- function(path, sep, header = TRUE) {\n  mydata = read.csv(path, sep, header = header)\n  return(mydata)\n}\n\n\ndataSummary<-function(mydata){\n  strData=str(mydata)\n  return(strData)\n}\n\n\ngetDepVar=function(depVar){\n  return(depVar)\n}\n\ngetIndepVar=function(preds){\n  return(preds)\n}\n\ncrossValidation <- function(mydata, prob){\n  trainIndex=list()\n  train=list()\n  test=list()\n  set.seed(100) \n  dat=data.frame(mydata)\n  trainIndex <- createDataPartition(dat[,1] , p=prob)\n  \n  train=dat[as.numeric(unlist(trainIndex) ),]\n  test=dat[-as.numeric(unlist(trainIndex) ),]\n  \n  return(list(train, test) )\n} \n\nGLMModel=function(train_test, depVar, family) {\n  accuracy=list()\n  predictionModel=list()  \n  dat=data.frame(train_test[1])\n \n  # Create the formula from the variables\n  fRpart <- as.formula(paste(colnames(dat)[depVar], \'.\', sep=\' ~ \'))\n   \n  GLM= glm(formula = fRpart, data = dat, na.action = na.pass, family = family)\n\n  test = data.frame(train_test[2])\n  pred <- predict(GLM,test[ , -depVar])\n\n  cm = confusionMatrix(pred, test[,depVar]) # create the confusion matrix\n  Precision = mean(cm$byClass[,5])\n  Recall = mean(cm$byClass[,6])\n  F1 = mean(cm$byClass[,7])\n  cat(\'Precision : \' , Precision)\n  cat(\'Recall : \' , Recall)\n  cat(\'F1 : \' , F1)  \n}\n\ndata = readFile(\'" + path) + "\' , \'") + delim) + "\' )\nstrData = dataSummary(data)\n\nY=getDepVar(") + item_predictive) + " )\n\ntrain_test=crossValidation(data, ") + _get_83);
+              String _plus_233 = (_plus_232 + " )\n\nModel = GLMModel(train_test , Y, ");
+              Object _get_84 = list.get(1);
+              String _plus_234 = (_plus_233 + _get_84);
+              String _plus_235 = (_plus_234 + ") ");
+              fsa.generateFile("LogisticRegression.R", _plus_235);
+            }
+          }
+        }
       }
     }
   }

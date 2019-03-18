@@ -67,6 +67,7 @@ public class MmlFactoryImpl extends EFactoryImpl implements MmlFactory
     switch (eClass.getClassifierID())
     {
       case MmlPackage.MML_MODEL: return createMMLModel();
+      case MmlPackage.PREAMBULE: return createPREAMBULE();
       case MmlPackage.DATA_INPUT: return createDataInput();
       case MmlPackage.CSV_PARSING_CONFIGURATION: return createCSVParsingConfiguration();
       case MmlPackage.ML_CHOICE_ALGORITHM: return createMLChoiceAlgorithm();
@@ -106,6 +107,8 @@ public class MmlFactoryImpl extends EFactoryImpl implements MmlFactory
         return createSVMKernelFromString(eDataType, initialValue);
       case MmlPackage.SVM_CLASSIFICATION:
         return createSVMClassificationFromString(eDataType, initialValue);
+      case MmlPackage.CLASS:
+        return createCLASSFromString(eDataType, initialValue);
       case MmlPackage.VALIDATION_METRIC:
         return createValidationMetricFromString(eDataType, initialValue);
       default:
@@ -131,6 +134,8 @@ public class MmlFactoryImpl extends EFactoryImpl implements MmlFactory
         return convertSVMKernelToString(eDataType, instanceValue);
       case MmlPackage.SVM_CLASSIFICATION:
         return convertSVMClassificationToString(eDataType, instanceValue);
+      case MmlPackage.CLASS:
+        return convertCLASSToString(eDataType, instanceValue);
       case MmlPackage.VALIDATION_METRIC:
         return convertValidationMetricToString(eDataType, instanceValue);
       default:
@@ -147,6 +152,17 @@ public class MmlFactoryImpl extends EFactoryImpl implements MmlFactory
   {
     MMLModelImpl mmlModel = new MMLModelImpl();
     return mmlModel;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PREAMBULE createPREAMBULE()
+  {
+    PREAMBULEImpl preambule = new PREAMBULEImpl();
+    return preambule;
   }
 
   /**
@@ -409,6 +425,28 @@ public class MmlFactoryImpl extends EFactoryImpl implements MmlFactory
    * @generated
    */
   public String convertSVMClassificationToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CLASS createCLASSFromString(EDataType eDataType, String initialValue)
+  {
+    CLASS result = CLASS.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertCLASSToString(EDataType eDataType, Object instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
   }

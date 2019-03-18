@@ -3,18 +3,19 @@ grammar org.xtext.example.mydsl.Mml with org.eclipse.xtext.common.Terminals
 generate mml "http://www.xtext.org/example/mydsl/Mml"
 
 MMLModel:
-	input=DataInput
-	algorithm=MLChoiceAlgorithm
+	"Model:"  (pream=PREAMBULE)?
+	(input=DataInput)?
+	(algorithm=MLChoiceAlgorithm)?
 	formula=RFormula?
 	validation=Validation
 	"End."
 	;
 
+PREAMBULE:
+	nomProgramme=ID 
+;
 
-
-	
 /*
- * 
  * mini DSL to read data (here CSV)
  * mini CSV DSL
  */
@@ -26,9 +27,6 @@ CSVParsingConfiguration:
 ;
 
 enum CSVSeparator : COMMA=',' | SEMI_COLON=";" ;
-
-
-
 
 /*
  * mini DSL to select the ML algorithm we want 
@@ -43,7 +41,7 @@ MLChoiceAlgorithm:
 ;
 
 
-enum FrameworkLang: SCIKIT="scikit-learn" | R="R" | JavaWeka="Weka";
+enum FrameworkLang: SCIKIT="scikit-learn" | R="R" ;
 
 MLAlgorithm : 
 	SVM|DT|RandomForest|LogisticRegression;
@@ -64,17 +62,16 @@ enum SVMClassification:
 
 DT:
 	name =  'DT' (max_depth=INT)? ; 
-	// TODO: additional hyperparameters
-	// note: R-package CART: class or anova is out of the scope since we're only targeted classification problem
 
-
-RandomForest: name =  'RandomForest'
-; // TODO: hyperparameters?
+RandomForest: name =  'RandomForest' (ntree=INT) ;
 
 LogisticRegression: name =  'LogisticRegression'
-; // TODO: hyperparameters?
+	'class=' class = CLASS
+;
 
-
+enum CLASS:
+	binomial = "binomial" | gaussian = "gaussian" | poisson = "poisson" 
+;
 
 FLOAT: INT '.' INT;	
 

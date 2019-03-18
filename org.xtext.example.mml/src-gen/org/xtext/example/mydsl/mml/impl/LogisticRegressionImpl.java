@@ -3,8 +3,13 @@
  */
 package org.xtext.example.mydsl.mml.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import org.xtext.example.mydsl.mml.CLASS;
 import org.xtext.example.mydsl.mml.LogisticRegression;
 import org.xtext.example.mydsl.mml.MmlPackage;
 
@@ -12,11 +17,37 @@ import org.xtext.example.mydsl.mml.MmlPackage;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Logistic Regression</b></em>'.
  * <!-- end-user-doc -->
+ * <p>
+ * The following features are implemented:
+ * </p>
+ * <ul>
+ *   <li>{@link org.xtext.example.mydsl.mml.impl.LogisticRegressionImpl#getClass_ <em>Class</em>}</li>
+ * </ul>
  *
  * @generated
  */
 public class LogisticRegressionImpl extends MLAlgorithmImpl implements LogisticRegression
 {
+  /**
+   * The default value of the '{@link #getClass_() <em>Class</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getClass_()
+   * @generated
+   * @ordered
+   */
+  protected static final CLASS CLASS_EDEFAULT = CLASS.BINOMIAL;
+
+  /**
+   * The cached value of the '{@link #getClass_() <em>Class</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getClass_()
+   * @generated
+   * @ordered
+   */
+  protected CLASS class_ = CLASS_EDEFAULT;
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -36,6 +67,112 @@ public class LogisticRegressionImpl extends MLAlgorithmImpl implements LogisticR
   protected EClass eStaticClass()
   {
     return MmlPackage.Literals.LOGISTIC_REGRESSION;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CLASS getClass_()
+  {
+    return class_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setClass(CLASS newClass)
+  {
+    CLASS oldClass = class_;
+    class_ = newClass == null ? CLASS_EDEFAULT : newClass;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MmlPackage.LOGISTIC_REGRESSION__CLASS, oldClass, class_));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType)
+  {
+    switch (featureID)
+    {
+      case MmlPackage.LOGISTIC_REGRESSION__CLASS:
+        return getClass_();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eSet(int featureID, Object newValue)
+  {
+    switch (featureID)
+    {
+      case MmlPackage.LOGISTIC_REGRESSION__CLASS:
+        setClass((CLASS)newValue);
+        return;
+    }
+    super.eSet(featureID, newValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eUnset(int featureID)
+  {
+    switch (featureID)
+    {
+      case MmlPackage.LOGISTIC_REGRESSION__CLASS:
+        setClass(CLASS_EDEFAULT);
+        return;
+    }
+    super.eUnset(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
+      case MmlPackage.LOGISTIC_REGRESSION__CLASS:
+        return class_ != CLASS_EDEFAULT;
+    }
+    return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (class: ");
+    result.append(class_);
+    result.append(')');
+    return result.toString();
   }
 
 } //LogisticRegressionImpl

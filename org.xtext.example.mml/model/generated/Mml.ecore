@@ -2,6 +2,8 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mml" nsURI="http://www.xtext.org/example/mydsl/Mml" nsPrefix="mml">
   <eClassifiers xsi:type="ecore:EClass" name="MMLModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pream" eType="#//PREAMBULE"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="input" eType="#//DataInput"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="algorithm" eType="#//MLChoiceAlgorithm"
@@ -10,6 +12,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="validation" eType="#//Validation"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PREAMBULE">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nomProgramme" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataInput">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="filelocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -31,7 +36,6 @@
   <eClassifiers xsi:type="ecore:EEnum" name="FrameworkLang">
     <eLiterals name="SCIKIT" literal="scikit-learn"/>
     <eLiterals name="R" value="1" literal="R"/>
-    <eLiterals name="JavaWeka" value="2" literal="Weka"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MLAlgorithm">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -55,8 +59,17 @@
   <eClassifiers xsi:type="ecore:EClass" name="DT" eSuperTypes="#//MLAlgorithm">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="max_depth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RandomForest" eSuperTypes="#//MLAlgorithm"/>
-  <eClassifiers xsi:type="ecore:EClass" name="LogisticRegression" eSuperTypes="#//MLAlgorithm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RandomForest" eSuperTypes="#//MLAlgorithm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ntree" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogisticRegression" eSuperTypes="#//MLAlgorithm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="class" eType="#//CLASS"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CLASS">
+    <eLiterals name="binomial" literal="binomial"/>
+    <eLiterals name="gaussian" value="1" literal="gaussian"/>
+    <eLiterals name="poisson" value="2" literal="poisson"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RFormula">
     <eStructuralFeatures xsi:type="ecore:EReference" name="predictive" eType="#//FormulaItem"
         containment="true"/>

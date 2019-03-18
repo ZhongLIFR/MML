@@ -28,53 +28,81 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 	public class MMLModelElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.Mml.MMLModel");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cInputAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cInputDataInputParserRuleCall_0_0 = (RuleCall)cInputAssignment_0.eContents().get(0);
-		private final Assignment cAlgorithmAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cAlgorithmMLChoiceAlgorithmParserRuleCall_1_0 = (RuleCall)cAlgorithmAssignment_1.eContents().get(0);
-		private final Assignment cFormulaAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cFormulaRFormulaParserRuleCall_2_0 = (RuleCall)cFormulaAssignment_2.eContents().get(0);
-		private final Assignment cValidationAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cValidationValidationParserRuleCall_3_0 = (RuleCall)cValidationAssignment_3.eContents().get(0);
-		private final Keyword cEndKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Keyword cModelKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cPreamAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cPreamPREAMBULEParserRuleCall_1_0 = (RuleCall)cPreamAssignment_1.eContents().get(0);
+		private final Assignment cInputAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cInputDataInputParserRuleCall_2_0 = (RuleCall)cInputAssignment_2.eContents().get(0);
+		private final Assignment cAlgorithmAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cAlgorithmMLChoiceAlgorithmParserRuleCall_3_0 = (RuleCall)cAlgorithmAssignment_3.eContents().get(0);
+		private final Assignment cFormulaAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cFormulaRFormulaParserRuleCall_4_0 = (RuleCall)cFormulaAssignment_4.eContents().get(0);
+		private final Assignment cValidationAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cValidationValidationParserRuleCall_5_0 = (RuleCall)cValidationAssignment_5.eContents().get(0);
+		private final Keyword cEndKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
 		//MMLModel:
-		//	input=DataInput
-		//	algorithm=MLChoiceAlgorithm
+		//	"Model:" pream=PREAMBULE?
+		//	input=DataInput?
+		//	algorithm=MLChoiceAlgorithm?
 		//	formula=RFormula?
 		//	validation=Validation
 		//	"End.";
 		@Override public ParserRule getRule() { return rule; }
 		
-		//input=DataInput algorithm=MLChoiceAlgorithm formula=RFormula? validation=Validation "End."
+		//"Model:" pream=PREAMBULE? input=DataInput? algorithm=MLChoiceAlgorithm? formula=RFormula? validation=Validation "End."
 		public Group getGroup() { return cGroup; }
 		
-		//input=DataInput
-		public Assignment getInputAssignment_0() { return cInputAssignment_0; }
+		//"Model:"
+		public Keyword getModelKeyword_0() { return cModelKeyword_0; }
+		
+		//pream=PREAMBULE?
+		public Assignment getPreamAssignment_1() { return cPreamAssignment_1; }
+		
+		//PREAMBULE
+		public RuleCall getPreamPREAMBULEParserRuleCall_1_0() { return cPreamPREAMBULEParserRuleCall_1_0; }
+		
+		//input=DataInput?
+		public Assignment getInputAssignment_2() { return cInputAssignment_2; }
 		
 		//DataInput
-		public RuleCall getInputDataInputParserRuleCall_0_0() { return cInputDataInputParserRuleCall_0_0; }
+		public RuleCall getInputDataInputParserRuleCall_2_0() { return cInputDataInputParserRuleCall_2_0; }
 		
-		//algorithm=MLChoiceAlgorithm
-		public Assignment getAlgorithmAssignment_1() { return cAlgorithmAssignment_1; }
+		//algorithm=MLChoiceAlgorithm?
+		public Assignment getAlgorithmAssignment_3() { return cAlgorithmAssignment_3; }
 		
 		//MLChoiceAlgorithm
-		public RuleCall getAlgorithmMLChoiceAlgorithmParserRuleCall_1_0() { return cAlgorithmMLChoiceAlgorithmParserRuleCall_1_0; }
+		public RuleCall getAlgorithmMLChoiceAlgorithmParserRuleCall_3_0() { return cAlgorithmMLChoiceAlgorithmParserRuleCall_3_0; }
 		
 		//formula=RFormula?
-		public Assignment getFormulaAssignment_2() { return cFormulaAssignment_2; }
+		public Assignment getFormulaAssignment_4() { return cFormulaAssignment_4; }
 		
 		//RFormula
-		public RuleCall getFormulaRFormulaParserRuleCall_2_0() { return cFormulaRFormulaParserRuleCall_2_0; }
+		public RuleCall getFormulaRFormulaParserRuleCall_4_0() { return cFormulaRFormulaParserRuleCall_4_0; }
 		
 		//validation=Validation
-		public Assignment getValidationAssignment_3() { return cValidationAssignment_3; }
+		public Assignment getValidationAssignment_5() { return cValidationAssignment_5; }
 		
 		//Validation
-		public RuleCall getValidationValidationParserRuleCall_3_0() { return cValidationValidationParserRuleCall_3_0; }
+		public RuleCall getValidationValidationParserRuleCall_5_0() { return cValidationValidationParserRuleCall_5_0; }
 		
 		//"End."
-		public Keyword getEndKeyword_4() { return cEndKeyword_4; }
+		public Keyword getEndKeyword_6() { return cEndKeyword_6; }
+	}
+	public class PREAMBULEElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.Mml.PREAMBULE");
+		private final Assignment cNomProgrammeAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cNomProgrammeIDTerminalRuleCall_0 = (RuleCall)cNomProgrammeAssignment.eContents().get(0);
+		
+		//PREAMBULE:
+		//	nomProgramme=ID;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//nomProgramme=ID
+		public Assignment getNomProgrammeAssignment() { return cNomProgrammeAssignment; }
+		
+		//ID
+		public RuleCall getNomProgrammeIDTerminalRuleCall_0() { return cNomProgrammeIDTerminalRuleCall_0; }
 	}
 	public class DataInputElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.Mml.DataInput");
@@ -86,7 +114,6 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cParsingInstructionCSVParsingConfigurationParserRuleCall_2_0 = (RuleCall)cParsingInstructionAssignment_2.eContents().get(0);
 		
 		///*
-		// * 
 		// * mini DSL to read data (here CSV)
 		// * mini CSV DSL
 		// */ DataInput:
@@ -318,36 +345,62 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	public class RandomForestElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.Mml.RandomForest");
-		private final Assignment cNameAssignment = (Assignment)rule.eContents().get(1);
-		private final Keyword cNameRandomForestKeyword_0 = (Keyword)cNameAssignment.eContents().get(0);
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cNameRandomForestKeyword_0_0 = (Keyword)cNameAssignment_0.eContents().get(0);
+		private final Assignment cNtreeAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cNtreeINTTerminalRuleCall_1_0 = (RuleCall)cNtreeAssignment_1.eContents().get(0);
 		
-		//// TODO: additional hyperparameters
-		//// note: R-package CART: class or anova is out of the scope since we're only targeted classification problem
 		//RandomForest:
-		//	name='RandomForest';
+		//	name='RandomForest' ntree=INT;
 		@Override public ParserRule getRule() { return rule; }
 		
+		//name='RandomForest' ntree=INT
+		public Group getGroup() { return cGroup; }
+		
 		//name='RandomForest'
-		public Assignment getNameAssignment() { return cNameAssignment; }
+		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
 		
 		//'RandomForest'
-		public Keyword getNameRandomForestKeyword_0() { return cNameRandomForestKeyword_0; }
+		public Keyword getNameRandomForestKeyword_0_0() { return cNameRandomForestKeyword_0_0; }
+		
+		//ntree=INT
+		public Assignment getNtreeAssignment_1() { return cNtreeAssignment_1; }
+		
+		//INT
+		public RuleCall getNtreeINTTerminalRuleCall_1_0() { return cNtreeINTTerminalRuleCall_1_0; }
 	}
 	public class LogisticRegressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.Mml.LogisticRegression");
-		private final Assignment cNameAssignment = (Assignment)rule.eContents().get(1);
-		private final Keyword cNameLogisticRegressionKeyword_0 = (Keyword)cNameAssignment.eContents().get(0);
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cNameLogisticRegressionKeyword_0_0 = (Keyword)cNameAssignment_0.eContents().get(0);
+		private final Keyword cClassKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cClassAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cClassCLASSEnumRuleCall_2_0 = (RuleCall)cClassAssignment_2.eContents().get(0);
 		
-		//// TODO: hyperparameters?
 		//LogisticRegression:
-		//	name='LogisticRegression';
+		//	name='LogisticRegression'
+		//	'class=' class=CLASS;
 		@Override public ParserRule getRule() { return rule; }
 		
+		//name='LogisticRegression' 'class=' class=CLASS
+		public Group getGroup() { return cGroup; }
+		
 		//name='LogisticRegression'
-		public Assignment getNameAssignment() { return cNameAssignment; }
+		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
 		
 		//'LogisticRegression'
-		public Keyword getNameLogisticRegressionKeyword_0() { return cNameLogisticRegressionKeyword_0; }
+		public Keyword getNameLogisticRegressionKeyword_0_0() { return cNameLogisticRegressionKeyword_0_0; }
+		
+		//'class='
+		public Keyword getClassKeyword_1() { return cClassKeyword_1; }
+		
+		//class=CLASS
+		public Assignment getClassAssignment_2() { return cClassAssignment_2; }
+		
+		//CLASS
+		public RuleCall getClassCLASSEnumRuleCall_2_0() { return cClassCLASSEnumRuleCall_2_0; }
 	}
 	public class FLOATElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.Mml.FLOAT");
@@ -356,7 +409,6 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cFullStopKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final RuleCall cINTTerminalRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
 		
-		//// TODO: hyperparameters?
 		//FLOAT:
 		//	INT '.' INT;
 		@Override public ParserRule getRule() { return rule; }
@@ -654,14 +706,12 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSCIKITScikitLearnKeyword_0_0 = (Keyword)cSCIKITEnumLiteralDeclaration_0.eContents().get(0);
 		private final EnumLiteralDeclaration cREnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
 		private final Keyword cRRKeyword_1_0 = (Keyword)cREnumLiteralDeclaration_1.eContents().get(0);
-		private final EnumLiteralDeclaration cJavaWekaEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
-		private final Keyword cJavaWekaWekaKeyword_2_0 = (Keyword)cJavaWekaEnumLiteralDeclaration_2.eContents().get(0);
 		
 		//enum FrameworkLang:
-		//	SCIKIT="scikit-learn" | R | JavaWeka="Weka";
+		//	SCIKIT="scikit-learn" | R;
 		public EnumRule getRule() { return rule; }
 		
-		//SCIKIT="scikit-learn" | R | JavaWeka="Weka"
+		//SCIKIT="scikit-learn" | R
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//SCIKIT="scikit-learn"
@@ -675,12 +725,6 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//"R"
 		public Keyword getRRKeyword_1_0() { return cRRKeyword_1_0; }
-		
-		//JavaWeka="Weka"
-		public EnumLiteralDeclaration getJavaWekaEnumLiteralDeclaration_2() { return cJavaWekaEnumLiteralDeclaration_2; }
-		
-		//"Weka"
-		public Keyword getJavaWekaWekaKeyword_2_0() { return cJavaWekaWekaKeyword_2_0; }
 	}
 	public class SVMKernelElements extends AbstractEnumRuleElementFinder {
 		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.Mml.SVMKernel");
@@ -752,6 +796,41 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		//"one-classification"
 		public Keyword getOneClassOneClassificationKeyword_2_0() { return cOneClassOneClassificationKeyword_2_0; }
 	}
+	public class CLASSElements extends AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.Mml.CLASS");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cBinomialEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cBinomialBinomialKeyword_0_0 = (Keyword)cBinomialEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cGaussianEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cGaussianGaussianKeyword_1_0 = (Keyword)cGaussianEnumLiteralDeclaration_1.eContents().get(0);
+		private final EnumLiteralDeclaration cPoissonEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
+		private final Keyword cPoissonPoissonKeyword_2_0 = (Keyword)cPoissonEnumLiteralDeclaration_2.eContents().get(0);
+		
+		//enum CLASS:
+		//	binomial | gaussian | poisson;
+		public EnumRule getRule() { return rule; }
+		
+		//binomial | gaussian | poisson
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//binomial
+		public EnumLiteralDeclaration getBinomialEnumLiteralDeclaration_0() { return cBinomialEnumLiteralDeclaration_0; }
+		
+		//"binomial"
+		public Keyword getBinomialBinomialKeyword_0_0() { return cBinomialBinomialKeyword_0_0; }
+		
+		//gaussian
+		public EnumLiteralDeclaration getGaussianEnumLiteralDeclaration_1() { return cGaussianEnumLiteralDeclaration_1; }
+		
+		//"gaussian"
+		public Keyword getGaussianGaussianKeyword_1_0() { return cGaussianGaussianKeyword_1_0; }
+		
+		//poisson
+		public EnumLiteralDeclaration getPoissonEnumLiteralDeclaration_2() { return cPoissonEnumLiteralDeclaration_2; }
+		
+		//"poisson"
+		public Keyword getPoissonPoissonKeyword_2_0() { return cPoissonPoissonKeyword_2_0; }
+	}
 	public class ValidationMetricElements extends AbstractEnumRuleElementFinder {
 		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.example.mydsl.Mml.ValidationMetric");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
@@ -789,6 +868,7 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	private final MMLModelElements pMMLModel;
+	private final PREAMBULEElements pPREAMBULE;
 	private final DataInputElements pDataInput;
 	private final CSVParsingConfigurationElements pCSVParsingConfiguration;
 	private final CSVSeparatorElements eCSVSeparator;
@@ -801,6 +881,7 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 	private final DTElements pDT;
 	private final RandomForestElements pRandomForest;
 	private final LogisticRegressionElements pLogisticRegression;
+	private final CLASSElements eCLASS;
 	private final FLOATElements pFLOAT;
 	private final RFormulaElements pRFormula;
 	private final XFormulaElements pXFormula;
@@ -822,6 +903,7 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		this.grammar = internalFindGrammar(grammarProvider);
 		this.gaTerminals = gaTerminals;
 		this.pMMLModel = new MMLModelElements();
+		this.pPREAMBULE = new PREAMBULEElements();
 		this.pDataInput = new DataInputElements();
 		this.pCSVParsingConfiguration = new CSVParsingConfigurationElements();
 		this.eCSVSeparator = new CSVSeparatorElements();
@@ -834,6 +916,7 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		this.pDT = new DTElements();
 		this.pRandomForest = new RandomForestElements();
 		this.pLogisticRegression = new LogisticRegressionElements();
+		this.eCLASS = new CLASSElements();
 		this.pFLOAT = new FLOATElements();
 		this.pRFormula = new RFormulaElements();
 		this.pXFormula = new XFormulaElements();
@@ -874,8 +957,9 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//MMLModel:
-	//	input=DataInput
-	//	algorithm=MLChoiceAlgorithm
+	//	"Model:" pream=PREAMBULE?
+	//	input=DataInput?
+	//	algorithm=MLChoiceAlgorithm?
 	//	formula=RFormula?
 	//	validation=Validation
 	//	"End.";
@@ -887,8 +971,17 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		return getMMLModelAccess().getRule();
 	}
 	
+	//PREAMBULE:
+	//	nomProgramme=ID;
+	public PREAMBULEElements getPREAMBULEAccess() {
+		return pPREAMBULE;
+	}
+	
+	public ParserRule getPREAMBULERule() {
+		return getPREAMBULEAccess().getRule();
+	}
+	
 	///*
-	// * 
 	// * mini DSL to read data (here CSV)
 	// * mini CSV DSL
 	// */ DataInput:
@@ -938,7 +1031,7 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//enum FrameworkLang:
-	//	SCIKIT="scikit-learn" | R | JavaWeka="Weka";
+	//	SCIKIT="scikit-learn" | R;
 	public FrameworkLangElements getFrameworkLangAccess() {
 		return eFrameworkLang;
 	}
@@ -998,10 +1091,8 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		return getDTAccess().getRule();
 	}
 	
-	//// TODO: additional hyperparameters
-	//// note: R-package CART: class or anova is out of the scope since we're only targeted classification problem
 	//RandomForest:
-	//	name='RandomForest';
+	//	name='RandomForest' ntree=INT;
 	public RandomForestElements getRandomForestAccess() {
 		return pRandomForest;
 	}
@@ -1010,9 +1101,9 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		return getRandomForestAccess().getRule();
 	}
 	
-	//// TODO: hyperparameters?
 	//LogisticRegression:
-	//	name='LogisticRegression';
+	//	name='LogisticRegression'
+	//	'class=' class=CLASS;
 	public LogisticRegressionElements getLogisticRegressionAccess() {
 		return pLogisticRegression;
 	}
@@ -1021,7 +1112,16 @@ public class MmlGrammarAccess extends AbstractGrammarElementFinder {
 		return getLogisticRegressionAccess().getRule();
 	}
 	
-	//// TODO: hyperparameters?
+	//enum CLASS:
+	//	binomial | gaussian | poisson;
+	public CLASSElements getCLASSAccess() {
+		return eCLASS;
+	}
+	
+	public EnumRule getCLASSRule() {
+		return getCLASSAccess().getRule();
+	}
+	
 	//FLOAT:
 	//	INT '.' INT;
 	public FLOATElements getFLOATAccess() {

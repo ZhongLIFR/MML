@@ -16,6 +16,7 @@ import org.xtext.example.mydsl.mml.DataInput;
 import org.xtext.example.mydsl.mml.MLChoiceAlgorithm;
 import org.xtext.example.mydsl.mml.MMLModel;
 import org.xtext.example.mydsl.mml.MmlPackage;
+import org.xtext.example.mydsl.mml.PREAMBULE;
 import org.xtext.example.mydsl.mml.RFormula;
 import org.xtext.example.mydsl.mml.Validation;
 
@@ -27,6 +28,7 @@ import org.xtext.example.mydsl.mml.Validation;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.xtext.example.mydsl.mml.impl.MMLModelImpl#getPream <em>Pream</em>}</li>
  *   <li>{@link org.xtext.example.mydsl.mml.impl.MMLModelImpl#getInput <em>Input</em>}</li>
  *   <li>{@link org.xtext.example.mydsl.mml.impl.MMLModelImpl#getAlgorithm <em>Algorithm</em>}</li>
  *   <li>{@link org.xtext.example.mydsl.mml.impl.MMLModelImpl#getFormula <em>Formula</em>}</li>
@@ -37,6 +39,16 @@ import org.xtext.example.mydsl.mml.Validation;
  */
 public class MMLModelImpl extends MinimalEObjectImpl.Container implements MMLModel
 {
+  /**
+   * The cached value of the '{@link #getPream() <em>Pream</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getPream()
+   * @generated
+   * @ordered
+   */
+  protected PREAMBULE pream;
+
   /**
    * The cached value of the '{@link #getInput() <em>Input</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -96,6 +108,54 @@ public class MMLModelImpl extends MinimalEObjectImpl.Container implements MMLMod
   protected EClass eStaticClass()
   {
     return MmlPackage.Literals.MML_MODEL;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public PREAMBULE getPream()
+  {
+    return pream;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetPream(PREAMBULE newPream, NotificationChain msgs)
+  {
+    PREAMBULE oldPream = pream;
+    pream = newPream;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MmlPackage.MML_MODEL__PREAM, oldPream, newPream);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setPream(PREAMBULE newPream)
+  {
+    if (newPream != pream)
+    {
+      NotificationChain msgs = null;
+      if (pream != null)
+        msgs = ((InternalEObject)pream).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MmlPackage.MML_MODEL__PREAM, null, msgs);
+      if (newPream != null)
+        msgs = ((InternalEObject)newPream).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MmlPackage.MML_MODEL__PREAM, null, msgs);
+      msgs = basicSetPream(newPream, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MmlPackage.MML_MODEL__PREAM, newPream, newPream));
   }
 
   /**
@@ -300,6 +360,8 @@ public class MMLModelImpl extends MinimalEObjectImpl.Container implements MMLMod
   {
     switch (featureID)
     {
+      case MmlPackage.MML_MODEL__PREAM:
+        return basicSetPream(null, msgs);
       case MmlPackage.MML_MODEL__INPUT:
         return basicSetInput(null, msgs);
       case MmlPackage.MML_MODEL__ALGORITHM:
@@ -322,6 +384,8 @@ public class MMLModelImpl extends MinimalEObjectImpl.Container implements MMLMod
   {
     switch (featureID)
     {
+      case MmlPackage.MML_MODEL__PREAM:
+        return getPream();
       case MmlPackage.MML_MODEL__INPUT:
         return getInput();
       case MmlPackage.MML_MODEL__ALGORITHM:
@@ -344,6 +408,9 @@ public class MMLModelImpl extends MinimalEObjectImpl.Container implements MMLMod
   {
     switch (featureID)
     {
+      case MmlPackage.MML_MODEL__PREAM:
+        setPream((PREAMBULE)newValue);
+        return;
       case MmlPackage.MML_MODEL__INPUT:
         setInput((DataInput)newValue);
         return;
@@ -370,6 +437,9 @@ public class MMLModelImpl extends MinimalEObjectImpl.Container implements MMLMod
   {
     switch (featureID)
     {
+      case MmlPackage.MML_MODEL__PREAM:
+        setPream((PREAMBULE)null);
+        return;
       case MmlPackage.MML_MODEL__INPUT:
         setInput((DataInput)null);
         return;
@@ -396,6 +466,8 @@ public class MMLModelImpl extends MinimalEObjectImpl.Container implements MMLMod
   {
     switch (featureID)
     {
+      case MmlPackage.MML_MODEL__PREAM:
+        return pream != null;
       case MmlPackage.MML_MODEL__INPUT:
         return input != null;
       case MmlPackage.MML_MODEL__ALGORITHM:

@@ -54,6 +54,13 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass preambuleEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass dataInputEClass = null;
 
   /**
@@ -194,6 +201,13 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EEnum classEEnum = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EEnum validationMetricEEnum = null;
 
   /**
@@ -274,7 +288,7 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMMLModel_Input()
+  public EReference getMMLModel_Pream()
   {
     return (EReference)mmlModelEClass.getEStructuralFeatures().get(0);
   }
@@ -284,7 +298,7 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMMLModel_Algorithm()
+  public EReference getMMLModel_Input()
   {
     return (EReference)mmlModelEClass.getEStructuralFeatures().get(1);
   }
@@ -294,7 +308,7 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMMLModel_Formula()
+  public EReference getMMLModel_Algorithm()
   {
     return (EReference)mmlModelEClass.getEStructuralFeatures().get(2);
   }
@@ -304,9 +318,39 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMMLModel_Validation()
+  public EReference getMMLModel_Formula()
   {
     return (EReference)mmlModelEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMMLModel_Validation()
+  {
+    return (EReference)mmlModelEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getPREAMBULE()
+  {
+    return preambuleEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPREAMBULE_NomProgramme()
+  {
+    return (EAttribute)preambuleEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -494,9 +538,29 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getRandomForest_Ntree()
+  {
+    return (EAttribute)randomForestEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getLogisticRegression()
   {
     return logisticRegressionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getLogisticRegression_Class()
+  {
+    return (EAttribute)logisticRegressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -734,6 +798,16 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EEnum getCLASS()
+  {
+    return classEEnum;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EEnum getValidationMetric()
   {
     return validationMetricEEnum;
@@ -770,10 +844,14 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
 
     // Create classes and their features
     mmlModelEClass = createEClass(MML_MODEL);
+    createEReference(mmlModelEClass, MML_MODEL__PREAM);
     createEReference(mmlModelEClass, MML_MODEL__INPUT);
     createEReference(mmlModelEClass, MML_MODEL__ALGORITHM);
     createEReference(mmlModelEClass, MML_MODEL__FORMULA);
     createEReference(mmlModelEClass, MML_MODEL__VALIDATION);
+
+    preambuleEClass = createEClass(PREAMBULE);
+    createEAttribute(preambuleEClass, PREAMBULE__NOM_PROGRAMME);
 
     dataInputEClass = createEClass(DATA_INPUT);
     createEAttribute(dataInputEClass, DATA_INPUT__FILELOCATION);
@@ -799,8 +877,10 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
     createEAttribute(dtEClass, DT__MAX_DEPTH);
 
     randomForestEClass = createEClass(RANDOM_FOREST);
+    createEAttribute(randomForestEClass, RANDOM_FOREST__NTREE);
 
     logisticRegressionEClass = createEClass(LOGISTIC_REGRESSION);
+    createEAttribute(logisticRegressionEClass, LOGISTIC_REGRESSION__CLASS);
 
     rFormulaEClass = createEClass(RFORMULA);
     createEReference(rFormulaEClass, RFORMULA__PREDICTIVE);
@@ -834,6 +914,7 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
     frameworkLangEEnum = createEEnum(FRAMEWORK_LANG);
     svmKernelEEnum = createEEnum(SVM_KERNEL);
     svmClassificationEEnum = createEEnum(SVM_CLASSIFICATION);
+    classEEnum = createEEnum(CLASS);
     validationMetricEEnum = createEEnum(VALIDATION_METRIC);
   }
 
@@ -876,10 +957,14 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
 
     // Initialize classes and features; add operations and parameters
     initEClass(mmlModelEClass, MMLModel.class, "MMLModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMMLModel_Pream(), this.getPREAMBULE(), null, "pream", null, 0, 1, MMLModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMMLModel_Input(), this.getDataInput(), null, "input", null, 0, 1, MMLModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMMLModel_Algorithm(), this.getMLChoiceAlgorithm(), null, "algorithm", null, 0, 1, MMLModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMMLModel_Formula(), this.getRFormula(), null, "formula", null, 0, 1, MMLModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMMLModel_Validation(), this.getValidation(), null, "validation", null, 0, 1, MMLModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(preambuleEClass, org.xtext.example.mydsl.mml.PREAMBULE.class, "PREAMBULE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getPREAMBULE_NomProgramme(), ecorePackage.getEString(), "nomProgramme", null, 0, 1, org.xtext.example.mydsl.mml.PREAMBULE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(dataInputEClass, DataInput.class, "DataInput", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getDataInput_Filelocation(), ecorePackage.getEString(), "filelocation", null, 0, 1, DataInput.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -905,8 +990,10 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
     initEAttribute(getDT_Max_depth(), ecorePackage.getEInt(), "max_depth", null, 0, 1, org.xtext.example.mydsl.mml.DT.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(randomForestEClass, RandomForest.class, "RandomForest", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getRandomForest_Ntree(), ecorePackage.getEInt(), "ntree", null, 0, 1, RandomForest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(logisticRegressionEClass, LogisticRegression.class, "LogisticRegression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getLogisticRegression_Class(), this.getCLASS(), "class", null, 0, 1, LogisticRegression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(rFormulaEClass, RFormula.class, "RFormula", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getRFormula_Predictive(), this.getFormulaItem(), null, "predictive", null, 0, 1, RFormula.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -943,7 +1030,6 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
     initEEnum(frameworkLangEEnum, FrameworkLang.class, "FrameworkLang");
     addEEnumLiteral(frameworkLangEEnum, FrameworkLang.SCIKIT);
     addEEnumLiteral(frameworkLangEEnum, FrameworkLang.R);
-    addEEnumLiteral(frameworkLangEEnum, FrameworkLang.JAVA_WEKA);
 
     initEEnum(svmKernelEEnum, SVMKernel.class, "SVMKernel");
     addEEnumLiteral(svmKernelEEnum, SVMKernel.LINEAR);
@@ -954,6 +1040,11 @@ public class MmlPackageImpl extends EPackageImpl implements MmlPackage
     addEEnumLiteral(svmClassificationEEnum, SVMClassification.CCLASS);
     addEEnumLiteral(svmClassificationEEnum, SVMClassification.NU_CLASS);
     addEEnumLiteral(svmClassificationEEnum, SVMClassification.ONE_CLASS);
+
+    initEEnum(classEEnum, org.xtext.example.mydsl.mml.CLASS.class, "CLASS");
+    addEEnumLiteral(classEEnum, org.xtext.example.mydsl.mml.CLASS.BINOMIAL);
+    addEEnumLiteral(classEEnum, org.xtext.example.mydsl.mml.CLASS.GAUSSIAN);
+    addEEnumLiteral(classEEnum, org.xtext.example.mydsl.mml.CLASS.POISSON);
 
     initEEnum(validationMetricEEnum, ValidationMetric.class, "ValidationMetric");
     addEEnumLiteral(validationMetricEEnum, ValidationMetric.RECALL);

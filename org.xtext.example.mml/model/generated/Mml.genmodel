@@ -13,7 +13,6 @@
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Mml.ecore#//FrameworkLang">
       <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//FrameworkLang/SCIKIT"/>
       <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//FrameworkLang/R"/>
-      <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//FrameworkLang/JavaWeka"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Mml.ecore#//SVMKernel">
       <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//SVMKernel/linear"/>
@@ -25,16 +24,25 @@
       <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//SVMClassification/nuClass"/>
       <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//SVMClassification/oneClass"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Mml.ecore#//CLASS">
+      <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//CLASS/binomial"/>
+      <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//CLASS/gaussian"/>
+      <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//CLASS/poisson"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Mml.ecore#//ValidationMetric">
       <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//ValidationMetric/RECALL"/>
       <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//ValidationMetric/PRECISION"/>
       <genEnumLiterals ecoreEnumLiteral="Mml.ecore#//ValidationMetric/F1"/>
     </genEnums>
     <genClasses ecoreClass="Mml.ecore#//MMLModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mml.ecore#//MMLModel/pream"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mml.ecore#//MMLModel/input"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mml.ecore#//MMLModel/algorithm"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mml.ecore#//MMLModel/formula"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mml.ecore#//MMLModel/validation"/>
+    </genClasses>
+    <genClasses ecoreClass="Mml.ecore#//PREAMBULE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mml.ecore#//PREAMBULE/nomProgramme"/>
     </genClasses>
     <genClasses ecoreClass="Mml.ecore#//DataInput">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mml.ecore#//DataInput/filelocation"/>
@@ -59,8 +67,12 @@
     <genClasses ecoreClass="Mml.ecore#//DT">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mml.ecore#//DT/max_depth"/>
     </genClasses>
-    <genClasses ecoreClass="Mml.ecore#//RandomForest"/>
-    <genClasses ecoreClass="Mml.ecore#//LogisticRegression"/>
+    <genClasses ecoreClass="Mml.ecore#//RandomForest">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mml.ecore#//RandomForest/ntree"/>
+    </genClasses>
+    <genClasses ecoreClass="Mml.ecore#//LogisticRegression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Mml.ecore#//LogisticRegression/class"/>
+    </genClasses>
     <genClasses ecoreClass="Mml.ecore#//RFormula">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mml.ecore#//RFormula/predictive"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Mml.ecore#//RFormula/predictors"/>

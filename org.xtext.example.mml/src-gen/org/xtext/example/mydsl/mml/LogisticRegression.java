@@ -9,6 +9,12 @@ package org.xtext.example.mydsl.mml;
  * A representation of the model object '<em><b>Logistic Regression</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.xtext.example.mydsl.mml.LogisticRegression#getClass_ <em>Class</em>}</li>
+ * </ul>
  *
  * @see org.xtext.example.mydsl.mml.MmlPackage#getLogisticRegression()
  * @model
@@ -16,4 +22,33 @@ package org.xtext.example.mydsl.mml;
  */
 public interface LogisticRegression extends MLAlgorithm
 {
+  /**
+   * Returns the value of the '<em><b>Class</b></em>' attribute.
+   * The literals are from the enumeration {@link org.xtext.example.mydsl.mml.CLASS}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Class</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Class</em>' attribute.
+   * @see org.xtext.example.mydsl.mml.CLASS
+   * @see #setClass(CLASS)
+   * @see org.xtext.example.mydsl.mml.MmlPackage#getLogisticRegression_Class()
+   * @model
+   * @generated
+   */
+  CLASS getClass_();
+
+  /**
+   * Sets the value of the '{@link org.xtext.example.mydsl.mml.LogisticRegression#getClass_ <em>Class</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Class</em>' attribute.
+   * @see org.xtext.example.mydsl.mml.CLASS
+   * @see #getClass_()
+   * @generated
+   */
+  void setClass(CLASS value);
+
 } // LogisticRegression

@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.xtext.example.mydsl.mml.MMLModel#getPream <em>Pream</em>}</li>
  *   <li>{@link org.xtext.example.mydsl.mml.MMLModel#getInput <em>Input</em>}</li>
  *   <li>{@link org.xtext.example.mydsl.mml.MMLModel#getAlgorithm <em>Algorithm</em>}</li>
  *   <li>{@link org.xtext.example.mydsl.mml.MMLModel#getFormula <em>Formula</em>}</li>
@@ -26,6 +27,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface MMLModel extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Pream</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Pream</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Pream</em>' containment reference.
+   * @see #setPream(PREAMBULE)
+   * @see org.xtext.example.mydsl.mml.MmlPackage#getMMLModel_Pream()
+   * @model containment="true"
+   * @generated
+   */
+  PREAMBULE getPream();
+
+  /**
+   * Sets the value of the '{@link org.xtext.example.mydsl.mml.MMLModel#getPream <em>Pream</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Pream</em>' containment reference.
+   * @see #getPream()
+   * @generated
+   */
+  void setPream(PREAMBULE value);
+
   /**
    * Returns the value of the '<em><b>Input</b></em>' containment reference.
    * <!-- begin-user-doc -->

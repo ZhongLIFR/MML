@@ -69,13 +69,22 @@ public interface MmlPackage extends EPackage
   int MML_MODEL = 0;
 
   /**
+   * The feature id for the '<em><b>Pream</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MML_MODEL__PREAM = 0;
+
+  /**
    * The feature id for the '<em><b>Input</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MML_MODEL__INPUT = 0;
+  int MML_MODEL__INPUT = 1;
 
   /**
    * The feature id for the '<em><b>Algorithm</b></em>' containment reference.
@@ -84,7 +93,7 @@ public interface MmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MML_MODEL__ALGORITHM = 1;
+  int MML_MODEL__ALGORITHM = 2;
 
   /**
    * The feature id for the '<em><b>Formula</b></em>' containment reference.
@@ -93,7 +102,7 @@ public interface MmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MML_MODEL__FORMULA = 2;
+  int MML_MODEL__FORMULA = 3;
 
   /**
    * The feature id for the '<em><b>Validation</b></em>' containment reference.
@@ -102,7 +111,7 @@ public interface MmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MML_MODEL__VALIDATION = 3;
+  int MML_MODEL__VALIDATION = 4;
 
   /**
    * The number of structural features of the '<em>MML Model</em>' class.
@@ -111,7 +120,35 @@ public interface MmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MML_MODEL_FEATURE_COUNT = 4;
+  int MML_MODEL_FEATURE_COUNT = 5;
+
+  /**
+   * The meta object id for the '{@link org.xtext.example.mydsl.mml.impl.PREAMBULEImpl <em>PREAMBULE</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.xtext.example.mydsl.mml.impl.PREAMBULEImpl
+   * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getPREAMBULE()
+   * @generated
+   */
+  int PREAMBULE = 1;
+
+  /**
+   * The feature id for the '<em><b>Nom Programme</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PREAMBULE__NOM_PROGRAMME = 0;
+
+  /**
+   * The number of structural features of the '<em>PREAMBULE</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PREAMBULE_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link org.xtext.example.mydsl.mml.impl.DataInputImpl <em>Data Input</em>}' class.
@@ -121,7 +158,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getDataInput()
    * @generated
    */
-  int DATA_INPUT = 1;
+  int DATA_INPUT = 2;
 
   /**
    * The feature id for the '<em><b>Filelocation</b></em>' attribute.
@@ -158,7 +195,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getCSVParsingConfiguration()
    * @generated
    */
-  int CSV_PARSING_CONFIGURATION = 2;
+  int CSV_PARSING_CONFIGURATION = 3;
 
   /**
    * The feature id for the '<em><b>Sep</b></em>' attribute.
@@ -186,7 +223,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getMLChoiceAlgorithm()
    * @generated
    */
-  int ML_CHOICE_ALGORITHM = 3;
+  int ML_CHOICE_ALGORITHM = 4;
 
   /**
    * The feature id for the '<em><b>Framework</b></em>' attribute.
@@ -223,7 +260,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getMLAlgorithm()
    * @generated
    */
-  int ML_ALGORITHM = 4;
+  int ML_ALGORITHM = 5;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -251,7 +288,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getSVM()
    * @generated
    */
-  int SVM = 5;
+  int SVM = 6;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -315,7 +352,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getDT()
    * @generated
    */
-  int DT = 6;
+  int DT = 7;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -352,7 +389,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getRandomForest()
    * @generated
    */
-  int RANDOM_FOREST = 7;
+  int RANDOM_FOREST = 8;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -364,13 +401,22 @@ public interface MmlPackage extends EPackage
   int RANDOM_FOREST__NAME = ML_ALGORITHM__NAME;
 
   /**
+   * The feature id for the '<em><b>Ntree</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RANDOM_FOREST__NTREE = ML_ALGORITHM_FEATURE_COUNT + 0;
+
+  /**
    * The number of structural features of the '<em>Random Forest</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RANDOM_FOREST_FEATURE_COUNT = ML_ALGORITHM_FEATURE_COUNT + 0;
+  int RANDOM_FOREST_FEATURE_COUNT = ML_ALGORITHM_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.xtext.example.mydsl.mml.impl.LogisticRegressionImpl <em>Logistic Regression</em>}' class.
@@ -380,7 +426,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getLogisticRegression()
    * @generated
    */
-  int LOGISTIC_REGRESSION = 8;
+  int LOGISTIC_REGRESSION = 9;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -392,13 +438,22 @@ public interface MmlPackage extends EPackage
   int LOGISTIC_REGRESSION__NAME = ML_ALGORITHM__NAME;
 
   /**
+   * The feature id for the '<em><b>Class</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LOGISTIC_REGRESSION__CLASS = ML_ALGORITHM_FEATURE_COUNT + 0;
+
+  /**
    * The number of structural features of the '<em>Logistic Regression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LOGISTIC_REGRESSION_FEATURE_COUNT = ML_ALGORITHM_FEATURE_COUNT + 0;
+  int LOGISTIC_REGRESSION_FEATURE_COUNT = ML_ALGORITHM_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.xtext.example.mydsl.mml.impl.RFormulaImpl <em>RFormula</em>}' class.
@@ -408,7 +463,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getRFormula()
    * @generated
    */
-  int RFORMULA = 9;
+  int RFORMULA = 10;
 
   /**
    * The feature id for the '<em><b>Predictive</b></em>' containment reference.
@@ -445,7 +500,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getXFormula()
    * @generated
    */
-  int XFORMULA = 10;
+  int XFORMULA = 11;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -473,7 +528,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getAllVariables()
    * @generated
    */
-  int ALL_VARIABLES = 11;
+  int ALL_VARIABLES = 12;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -510,7 +565,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getPredictorVariables()
    * @generated
    */
-  int PREDICTOR_VARIABLES = 12;
+  int PREDICTOR_VARIABLES = 13;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -547,7 +602,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getFormulaItem()
    * @generated
    */
-  int FORMULA_ITEM = 13;
+  int FORMULA_ITEM = 14;
 
   /**
    * The feature id for the '<em><b>Column</b></em>' attribute.
@@ -584,7 +639,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getValidation()
    * @generated
    */
-  int VALIDATION = 14;
+  int VALIDATION = 15;
 
   /**
    * The feature id for the '<em><b>Stratification</b></em>' containment reference.
@@ -621,7 +676,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getStratificationMethod()
    * @generated
    */
-  int STRATIFICATION_METHOD = 15;
+  int STRATIFICATION_METHOD = 16;
 
   /**
    * The number of structural features of the '<em>Stratification Method</em>' class.
@@ -640,7 +695,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getTrainingTest()
    * @generated
    */
-  int TRAINING_TEST = 16;
+  int TRAINING_TEST = 17;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -677,7 +732,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getCSVSeparator()
    * @generated
    */
-  int CSV_SEPARATOR = 17;
+  int CSV_SEPARATOR = 18;
 
   /**
    * The meta object id for the '{@link org.xtext.example.mydsl.mml.FrameworkLang <em>Framework Lang</em>}' enum.
@@ -687,7 +742,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getFrameworkLang()
    * @generated
    */
-  int FRAMEWORK_LANG = 18;
+  int FRAMEWORK_LANG = 19;
 
   /**
    * The meta object id for the '{@link org.xtext.example.mydsl.mml.SVMKernel <em>SVM Kernel</em>}' enum.
@@ -697,7 +752,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getSVMKernel()
    * @generated
    */
-  int SVM_KERNEL = 19;
+  int SVM_KERNEL = 20;
 
   /**
    * The meta object id for the '{@link org.xtext.example.mydsl.mml.SVMClassification <em>SVM Classification</em>}' enum.
@@ -707,7 +762,17 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getSVMClassification()
    * @generated
    */
-  int SVM_CLASSIFICATION = 20;
+  int SVM_CLASSIFICATION = 21;
+
+  /**
+   * The meta object id for the '{@link org.xtext.example.mydsl.mml.CLASS <em>CLASS</em>}' enum.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.xtext.example.mydsl.mml.CLASS
+   * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getCLASS()
+   * @generated
+   */
+  int CLASS = 22;
 
   /**
    * The meta object id for the '{@link org.xtext.example.mydsl.mml.ValidationMetric <em>Validation Metric</em>}' enum.
@@ -717,7 +782,7 @@ public interface MmlPackage extends EPackage
    * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getValidationMetric()
    * @generated
    */
-  int VALIDATION_METRIC = 21;
+  int VALIDATION_METRIC = 23;
 
 
   /**
@@ -729,6 +794,17 @@ public interface MmlPackage extends EPackage
    * @generated
    */
   EClass getMMLModel();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.xtext.example.mydsl.mml.MMLModel#getPream <em>Pream</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Pream</em>'.
+   * @see org.xtext.example.mydsl.mml.MMLModel#getPream()
+   * @see #getMMLModel()
+   * @generated
+   */
+  EReference getMMLModel_Pream();
 
   /**
    * Returns the meta object for the containment reference '{@link org.xtext.example.mydsl.mml.MMLModel#getInput <em>Input</em>}'.
@@ -773,6 +849,27 @@ public interface MmlPackage extends EPackage
    * @generated
    */
   EReference getMMLModel_Validation();
+
+  /**
+   * Returns the meta object for class '{@link org.xtext.example.mydsl.mml.PREAMBULE <em>PREAMBULE</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>PREAMBULE</em>'.
+   * @see org.xtext.example.mydsl.mml.PREAMBULE
+   * @generated
+   */
+  EClass getPREAMBULE();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.xtext.example.mydsl.mml.PREAMBULE#getNomProgramme <em>Nom Programme</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Nom Programme</em>'.
+   * @see org.xtext.example.mydsl.mml.PREAMBULE#getNomProgramme()
+   * @see #getPREAMBULE()
+   * @generated
+   */
+  EAttribute getPREAMBULE_NomProgramme();
 
   /**
    * Returns the meta object for class '{@link org.xtext.example.mydsl.mml.DataInput <em>Data Input</em>}'.
@@ -966,6 +1063,17 @@ public interface MmlPackage extends EPackage
   EClass getRandomForest();
 
   /**
+   * Returns the meta object for the attribute '{@link org.xtext.example.mydsl.mml.RandomForest#getNtree <em>Ntree</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Ntree</em>'.
+   * @see org.xtext.example.mydsl.mml.RandomForest#getNtree()
+   * @see #getRandomForest()
+   * @generated
+   */
+  EAttribute getRandomForest_Ntree();
+
+  /**
    * Returns the meta object for class '{@link org.xtext.example.mydsl.mml.LogisticRegression <em>Logistic Regression</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -974,6 +1082,17 @@ public interface MmlPackage extends EPackage
    * @generated
    */
   EClass getLogisticRegression();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.xtext.example.mydsl.mml.LogisticRegression#getClass_ <em>Class</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Class</em>'.
+   * @see org.xtext.example.mydsl.mml.LogisticRegression#getClass_()
+   * @see #getLogisticRegression()
+   * @generated
+   */
+  EAttribute getLogisticRegression_Class();
 
   /**
    * Returns the meta object for class '{@link org.xtext.example.mydsl.mml.RFormula <em>RFormula</em>}'.
@@ -1217,6 +1336,16 @@ public interface MmlPackage extends EPackage
   EEnum getSVMClassification();
 
   /**
+   * Returns the meta object for enum '{@link org.xtext.example.mydsl.mml.CLASS <em>CLASS</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for enum '<em>CLASS</em>'.
+   * @see org.xtext.example.mydsl.mml.CLASS
+   * @generated
+   */
+  EEnum getCLASS();
+
+  /**
    * Returns the meta object for enum '{@link org.xtext.example.mydsl.mml.ValidationMetric <em>Validation Metric</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1260,6 +1389,14 @@ public interface MmlPackage extends EPackage
     EClass MML_MODEL = eINSTANCE.getMMLModel();
 
     /**
+     * The meta object literal for the '<em><b>Pream</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MML_MODEL__PREAM = eINSTANCE.getMMLModel_Pream();
+
+    /**
      * The meta object literal for the '<em><b>Input</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1290,6 +1427,24 @@ public interface MmlPackage extends EPackage
      * @generated
      */
     EReference MML_MODEL__VALIDATION = eINSTANCE.getMMLModel_Validation();
+
+    /**
+     * The meta object literal for the '{@link org.xtext.example.mydsl.mml.impl.PREAMBULEImpl <em>PREAMBULE</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.xtext.example.mydsl.mml.impl.PREAMBULEImpl
+     * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getPREAMBULE()
+     * @generated
+     */
+    EClass PREAMBULE = eINSTANCE.getPREAMBULE();
+
+    /**
+     * The meta object literal for the '<em><b>Nom Programme</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PREAMBULE__NOM_PROGRAMME = eINSTANCE.getPREAMBULE_NomProgramme();
 
     /**
      * The meta object literal for the '{@link org.xtext.example.mydsl.mml.impl.DataInputImpl <em>Data Input</em>}' class.
@@ -1450,6 +1605,14 @@ public interface MmlPackage extends EPackage
     EClass RANDOM_FOREST = eINSTANCE.getRandomForest();
 
     /**
+     * The meta object literal for the '<em><b>Ntree</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute RANDOM_FOREST__NTREE = eINSTANCE.getRandomForest_Ntree();
+
+    /**
      * The meta object literal for the '{@link org.xtext.example.mydsl.mml.impl.LogisticRegressionImpl <em>Logistic Regression</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1458,6 +1621,14 @@ public interface MmlPackage extends EPackage
      * @generated
      */
     EClass LOGISTIC_REGRESSION = eINSTANCE.getLogisticRegression();
+
+    /**
+     * The meta object literal for the '<em><b>Class</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LOGISTIC_REGRESSION__CLASS = eINSTANCE.getLogisticRegression_Class();
 
     /**
      * The meta object literal for the '{@link org.xtext.example.mydsl.mml.impl.RFormulaImpl <em>RFormula</em>}' class.
@@ -1666,6 +1837,16 @@ public interface MmlPackage extends EPackage
      * @generated
      */
     EEnum SVM_CLASSIFICATION = eINSTANCE.getSVMClassification();
+
+    /**
+     * The meta object literal for the '{@link org.xtext.example.mydsl.mml.CLASS <em>CLASS</em>}' enum.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.xtext.example.mydsl.mml.CLASS
+     * @see org.xtext.example.mydsl.mml.impl.MmlPackageImpl#getCLASS()
+     * @generated
+     */
+    EEnum CLASS = eINSTANCE.getCLASS();
 
     /**
      * The meta object literal for the '{@link org.xtext.example.mydsl.mml.ValidationMetric <em>Validation Metric</em>}' enum.

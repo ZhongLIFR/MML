@@ -9,6 +9,12 @@ package org.xtext.example.mydsl.mml;
  * A representation of the model object '<em><b>Random Forest</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.xtext.example.mydsl.mml.RandomForest#getNtree <em>Ntree</em>}</li>
+ * </ul>
  *
  * @see org.xtext.example.mydsl.mml.MmlPackage#getRandomForest()
  * @model
@@ -16,4 +22,30 @@ package org.xtext.example.mydsl.mml;
  */
 public interface RandomForest extends MLAlgorithm
 {
+  /**
+   * Returns the value of the '<em><b>Ntree</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Ntree</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Ntree</em>' attribute.
+   * @see #setNtree(int)
+   * @see org.xtext.example.mydsl.mml.MmlPackage#getRandomForest_Ntree()
+   * @model
+   * @generated
+   */
+  int getNtree();
+
+  /**
+   * Sets the value of the '{@link org.xtext.example.mydsl.mml.RandomForest#getNtree <em>Ntree</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Ntree</em>' attribute.
+   * @see #getNtree()
+   * @generated
+   */
+  void setNtree(int value);
+
 } // RandomForest

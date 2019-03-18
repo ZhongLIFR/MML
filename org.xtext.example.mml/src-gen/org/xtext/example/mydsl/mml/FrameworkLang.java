@@ -38,17 +38,7 @@ public enum FrameworkLang implements Enumerator
    * @generated
    * @ordered
    */
-  R(1, "R", "R"),
-
-  /**
-   * The '<em><b>Java Weka</b></em>' literal object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #JAVA_WEKA_VALUE
-   * @generated
-   * @ordered
-   */
-  JAVA_WEKA(2, "JavaWeka", "Weka");
+  R(1, "R", "R");
 
   /**
    * The '<em><b>SCIKIT</b></em>' literal value.
@@ -81,21 +71,6 @@ public enum FrameworkLang implements Enumerator
   public static final int R_VALUE = 1;
 
   /**
-   * The '<em><b>Java Weka</b></em>' literal value.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Java Weka</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @see #JAVA_WEKA
-   * @model name="JavaWeka" literal="Weka"
-   * @generated
-   * @ordered
-   */
-  public static final int JAVA_WEKA_VALUE = 2;
-
-  /**
    * An array of all the '<em><b>Framework Lang</b></em>' enumerators.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -106,7 +81,6 @@ public enum FrameworkLang implements Enumerator
     {
       SCIKIT,
       R,
-      JAVA_WEKA,
     };
 
   /**
@@ -173,7 +147,6 @@ public enum FrameworkLang implements Enumerator
     {
       case SCIKIT_VALUE: return SCIKIT;
       case R_VALUE: return R;
-      case JAVA_WEKA_VALUE: return JAVA_WEKA;
     }
     return null;
   }

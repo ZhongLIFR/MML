@@ -3,7 +3,11 @@
  */
 package org.xtext.example.mydsl.mml.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.xtext.example.mydsl.mml.MmlPackage;
 import org.xtext.example.mydsl.mml.RandomForest;
@@ -12,11 +16,37 @@ import org.xtext.example.mydsl.mml.RandomForest;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Random Forest</b></em>'.
  * <!-- end-user-doc -->
+ * <p>
+ * The following features are implemented:
+ * </p>
+ * <ul>
+ *   <li>{@link org.xtext.example.mydsl.mml.impl.RandomForestImpl#getNtree <em>Ntree</em>}</li>
+ * </ul>
  *
  * @generated
  */
 public class RandomForestImpl extends MLAlgorithmImpl implements RandomForest
 {
+  /**
+   * The default value of the '{@link #getNtree() <em>Ntree</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNtree()
+   * @generated
+   * @ordered
+   */
+  protected static final int NTREE_EDEFAULT = 0;
+
+  /**
+   * The cached value of the '{@link #getNtree() <em>Ntree</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNtree()
+   * @generated
+   * @ordered
+   */
+  protected int ntree = NTREE_EDEFAULT;
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -36,6 +66,112 @@ public class RandomForestImpl extends MLAlgorithmImpl implements RandomForest
   protected EClass eStaticClass()
   {
     return MmlPackage.Literals.RANDOM_FOREST;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public int getNtree()
+  {
+    return ntree;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setNtree(int newNtree)
+  {
+    int oldNtree = ntree;
+    ntree = newNtree;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, MmlPackage.RANDOM_FOREST__NTREE, oldNtree, ntree));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType)
+  {
+    switch (featureID)
+    {
+      case MmlPackage.RANDOM_FOREST__NTREE:
+        return getNtree();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eSet(int featureID, Object newValue)
+  {
+    switch (featureID)
+    {
+      case MmlPackage.RANDOM_FOREST__NTREE:
+        setNtree((Integer)newValue);
+        return;
+    }
+    super.eSet(featureID, newValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eUnset(int featureID)
+  {
+    switch (featureID)
+    {
+      case MmlPackage.RANDOM_FOREST__NTREE:
+        setNtree(NTREE_EDEFAULT);
+        return;
+    }
+    super.eUnset(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
+      case MmlPackage.RANDOM_FOREST__NTREE:
+        return ntree != NTREE_EDEFAULT;
+    }
+    return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (ntree: ");
+    result.append(ntree);
+    result.append(')');
+    return result.toString();
   }
 
 } //RandomForestImpl

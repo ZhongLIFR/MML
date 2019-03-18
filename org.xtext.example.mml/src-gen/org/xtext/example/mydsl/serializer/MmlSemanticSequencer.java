@@ -23,6 +23,7 @@ import org.xtext.example.mydsl.mml.LogisticRegression;
 import org.xtext.example.mydsl.mml.MLChoiceAlgorithm;
 import org.xtext.example.mydsl.mml.MMLModel;
 import org.xtext.example.mydsl.mml.MmlPackage;
+import org.xtext.example.mydsl.mml.PREAMBULE;
 import org.xtext.example.mydsl.mml.PredictorVariables;
 import org.xtext.example.mydsl.mml.RFormula;
 import org.xtext.example.mydsl.mml.RandomForest;
@@ -68,6 +69,9 @@ public class MmlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 				return; 
 			case MmlPackage.MML_MODEL:
 				sequence_MMLModel(context, (MMLModel) semanticObject); 
+				return; 
+			case MmlPackage.PREAMBULE:
+				sequence_PREAMBULE(context, (PREAMBULE) semanticObject); 
 				return; 
 			case MmlPackage.PREDICTOR_VARIABLES:
 				sequence_PredictorVariables(context, (PredictorVariables) semanticObject); 
@@ -175,15 +179,18 @@ public class MmlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     LogisticRegression returns LogisticRegression
 	 *
 	 * Constraint:
-	 *     name='LogisticRegression'
+	 *     (name='LogisticRegression' class=CLASS)
 	 */
 	protected void sequence_LogisticRegression(ISerializationContext context, LogisticRegression semanticObject) {
 		if (errorAcceptor != null) {
 			if (transientValues.isValueTransient(semanticObject, MmlPackage.Literals.ML_ALGORITHM__NAME) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MmlPackage.Literals.ML_ALGORITHM__NAME));
+			if (transientValues.isValueTransient(semanticObject, MmlPackage.Literals.LOGISTIC_REGRESSION__CLASS) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MmlPackage.Literals.LOGISTIC_REGRESSION__CLASS));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getLogisticRegressionAccess().getNameLogisticRegressionKeyword_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getLogisticRegressionAccess().getNameLogisticRegressionKeyword_0_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getLogisticRegressionAccess().getClassCLASSEnumRuleCall_2_0(), semanticObject.getClass_());
 		feeder.finish();
 	}
 	
@@ -214,10 +221,28 @@ public class MmlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     MMLModel returns MMLModel
 	 *
 	 * Constraint:
-	 *     (input=DataInput algorithm=MLChoiceAlgorithm formula=RFormula? validation=Validation)
+	 *     (pream=PREAMBULE? input=DataInput? algorithm=MLChoiceAlgorithm? formula=RFormula? validation=Validation)
 	 */
 	protected void sequence_MMLModel(ISerializationContext context, MMLModel semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     PREAMBULE returns PREAMBULE
+	 *
+	 * Constraint:
+	 *     nomProgramme=ID
+	 */
+	protected void sequence_PREAMBULE(ISerializationContext context, PREAMBULE semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, MmlPackage.Literals.PREAMBULE__NOM_PROGRAMME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MmlPackage.Literals.PREAMBULE__NOM_PROGRAMME));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getPREAMBULEAccess().getNomProgrammeIDTerminalRuleCall_0(), semanticObject.getNomProgramme());
+		feeder.finish();
 	}
 	
 	
@@ -252,15 +277,18 @@ public class MmlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     RandomForest returns RandomForest
 	 *
 	 * Constraint:
-	 *     name='RandomForest'
+	 *     (name='RandomForest' ntree=INT)
 	 */
 	protected void sequence_RandomForest(ISerializationContext context, RandomForest semanticObject) {
 		if (errorAcceptor != null) {
 			if (transientValues.isValueTransient(semanticObject, MmlPackage.Literals.ML_ALGORITHM__NAME) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MmlPackage.Literals.ML_ALGORITHM__NAME));
+			if (transientValues.isValueTransient(semanticObject, MmlPackage.Literals.RANDOM_FOREST__NTREE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MmlPackage.Literals.RANDOM_FOREST__NTREE));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getRandomForestAccess().getNameRandomForestKeyword_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getRandomForestAccess().getNameRandomForestKeyword_0_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getRandomForestAccess().getNtreeINTTerminalRuleCall_1_0(), semanticObject.getNtree());
 		feeder.finish();
 	}
 	

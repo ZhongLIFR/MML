@@ -77,12 +77,35 @@ ruleMMLModel returns [EObject current=null]
 	leaveRule();
 }:
 	(
+		otherlv_0='Model:'
+		{
+			newLeafNode(otherlv_0, grammarAccess.getMMLModelAccess().getModelKeyword_0());
+		}
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getMMLModelAccess().getInputDataInputParserRuleCall_0_0());
+					newCompositeNode(grammarAccess.getMMLModelAccess().getPreamPREAMBULEParserRuleCall_1_0());
 				}
-				lv_input_0_0=ruleDataInput
+				lv_pream_1_0=rulePREAMBULE
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getMMLModelRule());
+					}
+					set(
+						$current,
+						"pream",
+						lv_pream_1_0,
+						"org.xtext.example.mydsl.Mml.PREAMBULE");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)?
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getMMLModelAccess().getInputDataInputParserRuleCall_2_0());
+				}
+				lv_input_2_0=ruleDataInput
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getMMLModelRule());
@@ -90,18 +113,18 @@ ruleMMLModel returns [EObject current=null]
 					set(
 						$current,
 						"input",
-						lv_input_0_0,
+						lv_input_2_0,
 						"org.xtext.example.mydsl.Mml.DataInput");
 					afterParserOrEnumRuleCall();
 				}
 			)
-		)
+		)?
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getMMLModelAccess().getAlgorithmMLChoiceAlgorithmParserRuleCall_1_0());
+					newCompositeNode(grammarAccess.getMMLModelAccess().getAlgorithmMLChoiceAlgorithmParserRuleCall_3_0());
 				}
-				lv_algorithm_1_0=ruleMLChoiceAlgorithm
+				lv_algorithm_3_0=ruleMLChoiceAlgorithm
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getMMLModelRule());
@@ -109,18 +132,18 @@ ruleMMLModel returns [EObject current=null]
 					set(
 						$current,
 						"algorithm",
-						lv_algorithm_1_0,
+						lv_algorithm_3_0,
 						"org.xtext.example.mydsl.Mml.MLChoiceAlgorithm");
 					afterParserOrEnumRuleCall();
 				}
 			)
-		)
+		)?
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getMMLModelAccess().getFormulaRFormulaParserRuleCall_2_0());
+					newCompositeNode(grammarAccess.getMMLModelAccess().getFormulaRFormulaParserRuleCall_4_0());
 				}
-				lv_formula_2_0=ruleRFormula
+				lv_formula_4_0=ruleRFormula
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getMMLModelRule());
@@ -128,7 +151,7 @@ ruleMMLModel returns [EObject current=null]
 					set(
 						$current,
 						"formula",
-						lv_formula_2_0,
+						lv_formula_4_0,
 						"org.xtext.example.mydsl.Mml.RFormula");
 					afterParserOrEnumRuleCall();
 				}
@@ -137,9 +160,9 @@ ruleMMLModel returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getMMLModelAccess().getValidationValidationParserRuleCall_3_0());
+					newCompositeNode(grammarAccess.getMMLModelAccess().getValidationValidationParserRuleCall_5_0());
 				}
-				lv_validation_3_0=ruleValidation
+				lv_validation_5_0=ruleValidation
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getMMLModelRule());
@@ -147,16 +170,51 @@ ruleMMLModel returns [EObject current=null]
 					set(
 						$current,
 						"validation",
-						lv_validation_3_0,
+						lv_validation_5_0,
 						"org.xtext.example.mydsl.Mml.Validation");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)
-		otherlv_4='End.'
+		otherlv_6='End.'
 		{
-			newLeafNode(otherlv_4, grammarAccess.getMMLModelAccess().getEndKeyword_4());
+			newLeafNode(otherlv_6, grammarAccess.getMMLModelAccess().getEndKeyword_6());
 		}
+	)
+;
+
+// Entry rule entryRulePREAMBULE
+entryRulePREAMBULE returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getPREAMBULERule()); }
+	iv_rulePREAMBULE=rulePREAMBULE
+	{ $current=$iv_rulePREAMBULE.current; }
+	EOF;
+
+// Rule PREAMBULE
+rulePREAMBULE returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			lv_nomProgramme_0_0=RULE_ID
+			{
+				newLeafNode(lv_nomProgramme_0_0, grammarAccess.getPREAMBULEAccess().getNomProgrammeIDTerminalRuleCall_0());
+			}
+			{
+				if ($current==null) {
+					$current = createModelElement(grammarAccess.getPREAMBULERule());
+				}
+				setWithLastConsumed(
+					$current,
+					"nomProgramme",
+					lv_nomProgramme_0_0,
+					"org.eclipse.xtext.common.Terminals.ID");
+			}
+		)
 	)
 ;
 
@@ -582,16 +640,36 @@ ruleRandomForest returns [EObject current=null]
 }:
 	(
 		(
-			lv_name_0_0='RandomForest'
-			{
-				newLeafNode(lv_name_0_0, grammarAccess.getRandomForestAccess().getNameRandomForestKeyword_0());
-			}
-			{
-				if ($current==null) {
-					$current = createModelElement(grammarAccess.getRandomForestRule());
+			(
+				lv_name_0_0='RandomForest'
+				{
+					newLeafNode(lv_name_0_0, grammarAccess.getRandomForestAccess().getNameRandomForestKeyword_0_0());
 				}
-				setWithLastConsumed($current, "name", lv_name_0_0, "RandomForest");
-			}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getRandomForestRule());
+					}
+					setWithLastConsumed($current, "name", lv_name_0_0, "RandomForest");
+				}
+			)
+		)
+		(
+			(
+				lv_ntree_1_0=RULE_INT
+				{
+					newLeafNode(lv_ntree_1_0, grammarAccess.getRandomForestAccess().getNtreeINTTerminalRuleCall_1_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getRandomForestRule());
+					}
+					setWithLastConsumed(
+						$current,
+						"ntree",
+						lv_ntree_1_0,
+						"org.eclipse.xtext.common.Terminals.INT");
+				}
+			)
 		)
 	)
 ;
@@ -613,16 +691,41 @@ ruleLogisticRegression returns [EObject current=null]
 }:
 	(
 		(
-			lv_name_0_0='LogisticRegression'
-			{
-				newLeafNode(lv_name_0_0, grammarAccess.getLogisticRegressionAccess().getNameLogisticRegressionKeyword_0());
-			}
-			{
-				if ($current==null) {
-					$current = createModelElement(grammarAccess.getLogisticRegressionRule());
+			(
+				lv_name_0_0='LogisticRegression'
+				{
+					newLeafNode(lv_name_0_0, grammarAccess.getLogisticRegressionAccess().getNameLogisticRegressionKeyword_0_0());
 				}
-				setWithLastConsumed($current, "name", lv_name_0_0, "LogisticRegression");
-			}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getLogisticRegressionRule());
+					}
+					setWithLastConsumed($current, "name", lv_name_0_0, "LogisticRegression");
+				}
+			)
+		)
+		otherlv_1='class='
+		{
+			newLeafNode(otherlv_1, grammarAccess.getLogisticRegressionAccess().getClassKeyword_1());
+		}
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getLogisticRegressionAccess().getClassCLASSEnumRuleCall_2_0());
+				}
+				lv_class_2_0=ruleCLASS
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getLogisticRegressionRule());
+					}
+					set(
+						$current,
+						"class",
+						lv_class_2_0,
+						"org.xtext.example.mydsl.Mml.CLASS");
+					afterParserOrEnumRuleCall();
+				}
+			)
 		)
 	)
 ;
@@ -1147,14 +1250,6 @@ ruleFrameworkLang returns [Enumerator current=null]
 				newLeafNode(enumLiteral_1, grammarAccess.getFrameworkLangAccess().getREnumLiteralDeclaration_1());
 			}
 		)
-		    |
-		(
-			enumLiteral_2='Weka'
-			{
-				$current = grammarAccess.getFrameworkLangAccess().getJavaWekaEnumLiteralDeclaration_2().getEnumLiteral().getInstance();
-				newLeafNode(enumLiteral_2, grammarAccess.getFrameworkLangAccess().getJavaWekaEnumLiteralDeclaration_2());
-			}
-		)
 	)
 ;
 
@@ -1223,6 +1318,41 @@ ruleSVMClassification returns [Enumerator current=null]
 			{
 				$current = grammarAccess.getSVMClassificationAccess().getOneClassEnumLiteralDeclaration_2().getEnumLiteral().getInstance();
 				newLeafNode(enumLiteral_2, grammarAccess.getSVMClassificationAccess().getOneClassEnumLiteralDeclaration_2());
+			}
+		)
+	)
+;
+
+// Rule CLASS
+ruleCLASS returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			enumLiteral_0='binomial'
+			{
+				$current = grammarAccess.getCLASSAccess().getBinomialEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_0, grammarAccess.getCLASSAccess().getBinomialEnumLiteralDeclaration_0());
+			}
+		)
+		    |
+		(
+			enumLiteral_1='gaussian'
+			{
+				$current = grammarAccess.getCLASSAccess().getGaussianEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_1, grammarAccess.getCLASSAccess().getGaussianEnumLiteralDeclaration_1());
+			}
+		)
+		    |
+		(
+			enumLiteral_2='poisson'
+			{
+				$current = grammarAccess.getCLASSAccess().getPoissonEnumLiteralDeclaration_2().getEnumLiteral().getInstance();
+				newLeafNode(enumLiteral_2, grammarAccess.getCLASSAccess().getPoissonEnumLiteralDeclaration_2());
 			}
 		)
 	)

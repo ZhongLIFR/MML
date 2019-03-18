@@ -33,6 +33,15 @@ public interface MmlFactory extends EFactory
   MMLModel createMMLModel();
 
   /**
+   * Returns a new object of class '<em>PREAMBULE</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>PREAMBULE</em>'.
+   * @generated
+   */
+  PREAMBULE createPREAMBULE();
+
+  /**
    * Returns a new object of class '<em>Data Input</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
