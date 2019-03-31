@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Back2Back Testing</title>
+     
+    </head>
+<body>
+
+<h1>Welcome to the Back2Back Testing</h1>
+<p>Choose the dataset (.csv)</p>
+<input id="fileSelect" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+
+        <p> </p>
+        <p> </p>
+        <div data-role="main" class="ui-content">
+            <form method="post" action="/action_page_post.php">
+                <fieldset data-role="controlgroup">
+                    <legend>Choose delimiters for your csv file:</legend>
+                    <label for="comma">comma</label>
+                    <input type="radio" name="delimiter in your csv file" id="comma" value="comma" checked>
+                        <label for="semicolon">semicolon</label>
+                        <input type="radio" name="delimiter in your csv file" id="semicolon" value="semicolon">
+                </fieldset>
+                
+            </form>
+        </div>
+<p></p><p></p>
+<table border="1">
+            <tr>
+                <th>
+                    Algorithm to choose
+                </th>
+                <th>
+                    Software to choose
+                </th>
+            </tr>
+            <tr>
+                <td>                    
+                    <form>
+                    <select name="users" onchange="displayEmployee(this.value)">
+                        <option value="">Select a ML algorithm : </option>
+                        <option value="">Decision Tree</option>
+                        <option value="">Logistic Regression</option>
+                        <option value="">Support Vertor Machine</option>
+                        <option value="">Random Forest</option>
+                    </select>   
+                </form></td>
+                <td>
+                    <form>
+                        <select name="users" onchange="displayEmployee(this.value)">
+                            <option value="">Select a software : </option>
+                            <option value="">R</option>
+                            <option value="">Scikit-learn </option>
+                        </select>   
+                    </form>
+                </td>
+            </tr>
+        </table>
+<p>Choose a metric</p>
+<p><input type="checkbox" name="category" value="F-1 score" />F1-score </p>   
+        <p><input type="checkbox" name="category" value="Recall" />Recall</p>
+        <p><input type="checkbox" name="category" value="Precision" />Precision</p>        
+        
+
+        <p>Input the ratio of training/validation set: </p>
+        <input type="text" value="0.7" />
+        
+        <p><input id="btnOperate" type="button" value="Submit" onclick=" " /></p>
+        <p>Results:</p>
+        <textarea>
+            The results will be here...
+        </textarea>
+       </body>
+</html>
